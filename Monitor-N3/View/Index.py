@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QDesktopWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QDesktopWidget, QMessageBox
 from PyQt5.QtCore import Qt
 import Calculadora
 import sys
@@ -250,65 +250,281 @@ class Monitor(QWidget):
 
     def calcular_np1(self):
         cb = 605.22
-        lectura = float(self.lned_lectura_p1.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Np1.setText(f"Np1 = {resultado} msnm")
+        lectura = self.lned_lectura_p1.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Np1.setText(f"Np1 = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
 
     def calcular_np2(self):
         cb = 604.24
-        lectura = float(self.lned_lectura_p2.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Np2.setText(f"Np2 = {resultado} msnm")
+        lectura = self.lned_lectura_p2.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Np2.setText(f"Np2 = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_np3(self):
         cb = 603.88
-        lectura = float(self.lned_lectura_p3.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Np3.setText(f"Np3 = {resultado} msnm")
+        lectura = self.lned_lectura_p3.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Np3.setText(f"Np3 = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_np4(self):
         cb = 600.60
-        lectura = float(self.lned_lectura_p4.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Np4.setText(f"Np4 = {resultado} msnm")
+        lectura = self.lned_lectura_p4.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Np4.setText(f"Np4 = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_np5(self):
         cb = 616.32
-        lectura = float(self.lned_lectura_p5.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Np5.setText(f"Np5 = {resultado} msnm")
+        lectura = self.lned_lectura_p5.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Np5.setText(f"Np5 = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_np6(self):
         cb = 616.17
-        lectura = float(self.lned_lectura_p6.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Np6.setText(f"Np6 = {resultado} msnm")
+        lectura = self.lned_lectura_p6.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Np6.setText(f"Np6 = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_np7(self):
         cb = 616.02
-        lectura = float(self.lned_lectura_p7.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Np7.setText(f"Np7 = {resultado} msnm")
+        lectura = self.lned_lectura_p7.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Np7.setText(f"Np7 = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
     def calcular_nf(self):
         cb = 599.07
-        lectura = float(self.lned_lectura_nf.text())
-        resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-        self.lbl_Nf.setText(f"Nf = {resultado} msnm")
+        lectura = self.lned_lectura_nf.text()
+
+        if not lectura:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, ingrese un valor numérico.")
+            error_dialog.exec_()
+            return
+
+        try:
+            lectura = float(lectura)
+            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+            self.lbl_Nf.setText(f"Nf = {resultado} msnm")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
     def calcular_q1(self):
-        volumen = float(self.lned_volumen1.text())
-        tiempo = float(self.lned_tiempo1.text())
-        resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
-        self.lbl_caudal1.setText(f"Q = {resultado} l/seg")
+        volumen = self.lned_volumen1.text()
+        tiempo = self.lned_tiempo1.text()
+
+        if not volumen or not tiempo:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, complete los campos numéricos.")
+            error_dialog.exec_()
+            return
+
+        try:
+            volumen = float(volumen)
+            tiempo = float(tiempo)
+            resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
+            self.lbl_caudal1.setText(f"Q = {resultado} l/seg")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_q2(self):
-        volumen = float(self.lned_volumen2.text())
-        tiempo = float(self.lned_tiempo2.text())
-        resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
-        self.lbl_caudal2.setText(f"Q = {resultado} l/seg")
+        volumen = self.lned_volumen2.text()
+        tiempo = self.lned_tiempo2.text()
+
+        if not volumen or not tiempo:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, complete los campos numéricos.")
+            error_dialog.exec_()
+            return
+
+        try:
+            volumen = float(volumen)
+            tiempo = float(tiempo)
+            resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
+            self.lbl_caudal2.setText(f"Q = {resultado} l/seg")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_q3(self):
-        volumen = float(self.lned_volumen3.text())
-        tiempo = float(self.lned_tiempo3.text())
-        resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
-        self.lbl_caudal3.setText(f"Q = {resultado} l/seg")
+        volumen = self.lned_volumen3.text()
+        tiempo = self.lned_tiempo3.text()
+
+        if not volumen or not tiempo:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, complete los campos numéricos.")
+            error_dialog.exec_()
+            return
+
+        try:
+            volumen = float(volumen)
+            tiempo = float(tiempo)
+            resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
+            self.lbl_caudal3.setText(f"Q = {resultado} l/seg")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
+
     def calcular_q4(self):
-        volumen = float(self.lned_volumen4.text())
-        tiempo = float(self.lned_tiempo4.text())
-        resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
-        self.lbl_caudal4.setText(f"Q = {resultado} l/seg")
+        volumen = self.lned_volumen4.text()
+        tiempo = self.lned_tiempo4.text()
+
+        if not volumen or not tiempo:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Por favor, complete los campos numéricos.")
+            error_dialog.exec_()
+            return
+
+        try:
+            volumen = float(volumen)
+            tiempo = float(tiempo)
+            resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
+            self.lbl_caudal4.setText(f"Q = {resultado} l/seg")
+        except ValueError:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle("Error")
+            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
+            error_dialog.exec_()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
