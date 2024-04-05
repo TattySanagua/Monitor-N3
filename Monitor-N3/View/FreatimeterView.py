@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt, QDateTime
+from PyQt5.QtCore import Qt, QDateTime, QDate
 from PyQt5.QtWidgets import QWidget, QLabel, QDateTimeEdit, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
-    QMessageBox
+    QMessageBox, QDateEdit
 import Calculadora
 
 class FreatimeterView(QWidget):
@@ -14,14 +14,15 @@ class FreatimeterView(QWidget):
         lbl_titulo_ppal = QLabel("Presa Lateral N° 3", self)
         lbl_fecha = QLabel("Fecha", self)
         lbl_nivel_embalse = QLabel("Nivel de embalse", self)
+        lbl_msnm = QLabel("[msnm]")
         lbl_titulo_freatimetro = QLabel("Freatímetro", self)
         lbl_freatimetro = QLabel("L3-F1", self)
         lbl_freatimetro.setFixedWidth(60)
         self.lbl_Nf = QLabel("Nf = 0.0")
 
-        self.datetime_edit = QDateTimeEdit(self)
-        self.datetime_edit.setCalendarPopup(True)
-        self.datetime_edit.setDateTime(QDateTime.currentDateTime())
+        self.date_edit = QDateEdit(self)
+        self.date_edit.setCalendarPopup(True)
+        self.date_edit.setDate(QDate.currentDate())
 
         self.lned_nivel_embalse = QLineEdit(self)
         self.lned_lectura_f = QLineEdit(self)
@@ -35,10 +36,11 @@ class FreatimeterView(QWidget):
         hlyt_fila1 = QHBoxLayout()
 
         hlyt_fecha.addWidget(lbl_fecha)
-        hlyt_fecha.addWidget(self.datetime_edit)
+        hlyt_fecha.addWidget(self.date_edit)
 
         hlyt_embalse.addWidget(lbl_nivel_embalse)
         hlyt_embalse.addWidget(self.lned_nivel_embalse)
+        hlyt_embalse.addWidget(lbl_msnm)
 
         hlyt_fila1.addWidget(lbl_freatimetro)
         hlyt_fila1.addWidget(self.lned_lectura_f)

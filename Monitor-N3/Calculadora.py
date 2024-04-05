@@ -5,3 +5,6 @@ class Calculadora:
 
     def calcular_caudal(self, volumen, tiempo):
         return (volumen/tiempo)
+
+    def calcular_caudal_parshall(self, ha):
+        return (0.1771*(ha**1.55))
