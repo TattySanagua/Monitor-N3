@@ -13,8 +13,8 @@ class AforadoresView(QWidget):
 
         lbl_titulo_ppal = QLabel("Presa Lateral N° 3", self)
         lbl_fecha = QLabel("Fecha", self)
-        lbl_nivel_embalse = QLabel("Nivel de embalse", self)
-        lbl_msnm = QLabel("[msnm]")
+        #lbl_nivel_embalse = QLabel("Nivel de embalse", self)
+        #lbl_msnm = QLabel("[msnm]")
         lbl_titulo_aforadores = QLabel("Aforadores", self)
         lbl_formula_aforador = QLabel("Caudal Q [l/seg] = Volumen/Tiempo", self)
         lbl_aforador1 = QLabel("AFo3-EI", self)
@@ -38,7 +38,7 @@ class AforadoresView(QWidget):
         self.date_edit.setCalendarPopup(True)
         self.date_edit.setDate(QDate.currentDate())
 
-        self.lned_nivel_embalse = QLineEdit(self)
+        #self.lned_nivel_embalse = QLineEdit(self)
         self.lned_volumen1 = QLineEdit(self)
         self.lned_volumen1.setPlaceholderText("Volumen")
         self.lned_volumen2 = QLineEdit(self)
@@ -59,7 +59,7 @@ class AforadoresView(QWidget):
         self.btn_calcular_parshall = QPushButton("Calcular", self)
 
         hlyt_fecha = QHBoxLayout()
-        hlyt_embalse = QHBoxLayout()
+        #hlyt_embalse = QHBoxLayout()
         hlyt_fila1 = QHBoxLayout()
         hlyt_fila2 = QHBoxLayout()
         hlyt_fila3 = QHBoxLayout()
@@ -68,9 +68,9 @@ class AforadoresView(QWidget):
         hlyt_fecha.addWidget(lbl_fecha)
         hlyt_fecha.addWidget(self.date_edit)
 
-        hlyt_embalse.addWidget(lbl_nivel_embalse)
-        hlyt_embalse.addWidget(self.lned_nivel_embalse)
-        hlyt_embalse.addWidget(lbl_msnm)
+        #hlyt_embalse.addWidget(lbl_nivel_embalse)
+        #hlyt_embalse.addWidget(self.lned_nivel_embalse)
+        #hlyt_embalse.addWidget(lbl_msnm)
 
         hlyt_fila1.addWidget(lbl_aforador1)
         hlyt_fila1.addWidget(self.lned_volumen1)
@@ -99,7 +99,7 @@ class AforadoresView(QWidget):
         vlyt_principal.setAlignment(Qt.AlignVCenter)
         vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)
         vlyt_principal.addLayout(hlyt_fecha)
-        vlyt_principal.addLayout(hlyt_embalse)
+        #vlyt_principal.addLayout(hlyt_embalse)
         vlyt_principal.addWidget(lbl_titulo_aforadores, alignment=Qt.AlignCenter)
         vlyt_principal.addWidget(lbl_formula_aforador, alignment=Qt.AlignCenter)
         vlyt_principal.addLayout(hlyt_fila1)

@@ -12,8 +12,8 @@ class PiezometersView(QWidget):
 
         lbl_titulo_ppal = QLabel("Presa Lateral N° 3", self)
         lbl_fecha = QLabel("Fecha", self)
-        lbl_nivel_embalse = QLabel("Nivel de embalse", self)
-        lbl_msnm = QLabel("[msnm]")
+        #lbl_nivel_embalse = QLabel("Nivel de embalse", self)
+        #lbl_msnm = QLabel("[msnm]")
         lbl_titulo_piezometro = QLabel("Piezómetros", self)
         lbl_formula_piezometro = QLabel("Np = CB - [(-cos α) * L]", self)
         lbl_descripcion1 = QLabel("Np: Nivel piezométrico [msnm]", self)
@@ -47,7 +47,7 @@ class PiezometersView(QWidget):
         self.date_edit.setCalendarPopup(True)
         self.date_edit.setDate(QDate.currentDate())
 
-        self.lned_nivel_embalse = QLineEdit(self)
+        #self.lned_nivel_embalse = QLineEdit(self)
         self.lned_lectura_p1 = QLineEdit(self)
         self.lned_lectura_p1.setPlaceholderText("Lectura L1")
         self.lned_lectura_p1.setFixedWidth(200)
@@ -80,7 +80,7 @@ class PiezometersView(QWidget):
         self.btn_guardar_np1 = QPushButton("Guardar registro", self)
 
         hlyt_fecha = QHBoxLayout()
-        hlyt_embalse = QHBoxLayout()
+        #hlyt_embalse = QHBoxLayout()
         hlyt_formula_descripcion = QHBoxLayout()
         hlyt_fila1 = QHBoxLayout()
         hlyt_fila2 = QHBoxLayout()
@@ -93,9 +93,9 @@ class PiezometersView(QWidget):
         hlyt_fecha.addWidget(lbl_fecha)
         hlyt_fecha.addWidget(self.date_edit)
 
-        hlyt_embalse.addWidget(lbl_nivel_embalse)
-        hlyt_embalse.addWidget(self.lned_nivel_embalse)
-        hlyt_embalse.addWidget(lbl_msnm)
+        # hlyt_embalse.addWidget(lbl_nivel_embalse)
+        # hlyt_embalse.addWidget(self.lned_nivel_embalse)
+        # hlyt_embalse.addWidget(lbl_msnm)
 
         hlyt_fila1.addWidget(lbl_piezometro1)
         hlyt_fila1.addWidget(self.lned_lectura_p1)
@@ -146,7 +146,7 @@ class PiezometersView(QWidget):
         vlyt_principal.setAlignment(Qt.AlignVCenter)
         vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)
         vlyt_principal.addLayout(hlyt_fecha)
-        vlyt_principal.addLayout(hlyt_embalse)
+        #vlyt_principal.addLayout(hlyt_embalse)
         vlyt_principal.addWidget(lbl_titulo_piezometro, alignment=Qt.AlignCenter)
         vlyt_principal.addLayout(hlyt_formula_descripcion)
         vlyt_principal.addLayout(hlyt_fila1)
