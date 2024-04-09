@@ -20,6 +20,63 @@ class Query:
     @staticmethod
     def get_l3_pc1():
         database_manager = DatabaseManager()
-        query = "SELECT fecha, nivel_piezometrico FROM l3_pc1;"
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_pc1 using(fecha);")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_l3_pc2():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_pc2 using(fecha);")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_l3_pc3():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_pc3 using(fecha);")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_l3_pc4():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_pc4 using(fecha);")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_l3_pc5():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_pc5 using(fecha);")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_l3_pc6():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_pc6 using(fecha);")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_l3_pc7():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_pc7 using(fecha);")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_l3_f1():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
+                 "INNER JOIN l3_f1 using(fecha);")
         results = database_manager.fetch_data(query)
         return results
