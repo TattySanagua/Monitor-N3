@@ -14,7 +14,7 @@ class Monitor(QMainWindow):
         super(Monitor, self).__init__()
         self.setWindowTitle("Monitor N3")
         # screen_size = QDesktopWidget().screenGeometry()
-        self.setGeometry(50, 50, 600, 650)
+        self.setGeometry(50, 50, 450, 650)
         self.setWindowIcon(QIcon("../LogoOrsep.jpg"))
         self.create_menu()
         self.central_widget = HomeView()

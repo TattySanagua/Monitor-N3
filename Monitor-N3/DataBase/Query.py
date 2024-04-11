@@ -1,12 +1,11 @@
-from Manager import DatabaseManager
+from DataBase.Manager import DatabaseManager
 
 class Query:
 
     @staticmethod
     def get_embalse():
-        database_manager = DatabaseManager()
         query = "SELECT fecha, hora, nivel_embalse FROM embalse;"
-        results = database_manager.fetch_data(query)
+        results = DatabaseManager.fetch_data(query)
         return results
 
     @staticmethod
@@ -80,3 +79,58 @@ class Query:
                  "INNER JOIN l3_f1 using(fecha);")
         results = database_manager.fetch_data(query)
         return results
+
+    @staticmethod
+    def insert_data_embalse(fecha, hora, nivel_ambalse):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO embalse (fecha, hora, nivel_embalse) "
+                 f"VALUES ('{fecha}', '{hora}', {nivel_ambalse});")
+        database_manager.execute_query(query)
+    @staticmethod
+    def insert_data_l3_pc1(fecha, nivel_piezometrico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_pc1 (fecha, nivel_piezometrico) "
+                 f"VALUES ('{fecha}', {nivel_piezometrico});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_l3_pc2(fecha, nivel_piezometrico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_pc2 (fecha, nivel_piezometrico) "
+                 f"VALUES ('{fecha}', {nivel_piezometrico});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_l3_pc3(fecha, nivel_piezometrico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_pc3 (fecha, nivel_piezometrico) "
+                 f"VALUES ('{fecha}', {nivel_piezometrico});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_l3_pc4(fecha, nivel_piezometrico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_pc4 (fecha, nivel_piezometrico) "
+                 f"VALUES ('{fecha}', {nivel_piezometrico});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_l3_pc5(fecha, nivel_piezometrico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_pc5 (fecha, nivel_piezometrico) "
+                 f"VALUES ('{fecha}', {nivel_piezometrico});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_l3_pc6(fecha, nivel_piezometrico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_pc6 (fecha, nivel_piezometrico) "
+                 f"VALUES ('{fecha}', {nivel_piezometrico});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_l3_pc7(fecha, nivel_piezometrico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_pc7 (fecha, nivel_piezometrico) "
+                 f"VALUES ('{fecha}', {nivel_piezometrico});")
+        database_manager.execute_query(query)
