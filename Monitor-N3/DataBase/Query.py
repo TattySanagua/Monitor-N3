@@ -134,3 +134,38 @@ class Query:
         query = (f"INSERT INTO l3_pc7 (fecha, nivel_piezometrico) "
                  f"VALUES ('{fecha}', {nivel_piezometrico});")
         database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_l3_f1(fecha, nivel_freatico):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO l3_f1 (fecha, nivel_freatico) "
+                 f"VALUES ('{fecha}', {nivel_freatico});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_afo3_ei(fecha, caudal):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO afo3_ei (fecha, caudal) "
+                 f"VALUES ('{fecha}', {caudal});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_afo3_pp(fecha, caudal):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO afo3_pp (fecha, caudal) "
+                 f"VALUES ('{fecha}', {caudal});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_afo3_tot(fecha, caudal):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO afo3_tot (fecha, caudal) "
+                 f"VALUES ('{fecha}', {caudal});")
+        database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_parshall(fecha, caudal):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO parshall (fecha, caudal) "
+                 f"VALUES ('{fecha}', {caudal});")
+        database_manager.execute_query(query)

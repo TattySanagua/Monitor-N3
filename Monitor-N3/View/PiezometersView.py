@@ -1,6 +1,8 @@
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QMessageBox, QDateEdit
+from mysql.connector import IntegrityError
+
 import Calculadora
 from DataBase.Query import Query
 
@@ -269,11 +271,7 @@ class PiezometersView(QWidget):
         decimales = 2
 
         if not lectura:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -282,11 +280,7 @@ class PiezometersView(QWidget):
             self.lbl_resultado1.setText(f"{resultado:.{decimales}f}")
             self.lned_lectura_p1.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_np2(self):
         cb = 604.24
@@ -294,11 +288,7 @@ class PiezometersView(QWidget):
         decimales = 2
 
         if not lectura:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -307,11 +297,7 @@ class PiezometersView(QWidget):
             self.lbl_resultado2.setText(f"{resultado:.{decimales}f}")
             self.lned_lectura_p2.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_np3(self):
         cb = 603.88
@@ -319,11 +305,7 @@ class PiezometersView(QWidget):
         decimales = 2
 
         if not lectura:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -332,11 +314,7 @@ class PiezometersView(QWidget):
             self.lbl_resultado3.setText(f"{resultado:.{decimales}f}")
             self.lned_lectura_p3.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_np4(self):
         cb = 600.60
@@ -344,11 +322,7 @@ class PiezometersView(QWidget):
         decimales = 2
 
         if not lectura:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -357,11 +331,7 @@ class PiezometersView(QWidget):
             self.lbl_resultado4.setText(f"{resultado:.{decimales}f}")
             self.lned_lectura_p4.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_np5(self):
         cb = 616.32
@@ -369,11 +339,7 @@ class PiezometersView(QWidget):
         decimales = 2
 
         if not lectura:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -382,11 +348,7 @@ class PiezometersView(QWidget):
             self.lbl_resultado5.setText(f"{resultado:.{decimales}f}")
             self.lned_lectura_p5.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_np6(self):
         cb = 616.17
@@ -394,11 +356,7 @@ class PiezometersView(QWidget):
         decimales = 2
 
         if not lectura:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -407,11 +365,7 @@ class PiezometersView(QWidget):
             self.lbl_resultado6.setText(f"{resultado:.{decimales}f}")
             self.lned_lectura_p6.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_np7(self):
         cb = 616.02
@@ -419,11 +373,7 @@ class PiezometersView(QWidget):
         decimales = 2
 
         if not lectura:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -432,22 +382,14 @@ class PiezometersView(QWidget):
             self.lbl_resultado7.setText(f"{resultado:.{decimales}f}")
             self.lned_lectura_p7.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def guardar_np1(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         nivel_piezometrico = self.lbl_resultado1.text()
 
         if not nivel_piezometrico or not fecha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Debe completar los campos de fecha y/o nivel piezométrico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
             return
 
         try:
@@ -456,22 +398,16 @@ class PiezometersView(QWidget):
             self.lbl_resultado1.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error al guardar los datos.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
     def guardar_np2(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         nivel_piezometrico = self.lbl_resultado2.text()
 
         if not nivel_piezometrico or not fecha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Debe completar los campos de fecha y/o nivel piezométrico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
             return
 
         try:
@@ -480,22 +416,16 @@ class PiezometersView(QWidget):
             self.lbl_resultado2.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error al guardar los datos.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
     def guardar_np3(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         nivel_piezometrico = self.lbl_resultado3.text()
 
         if not nivel_piezometrico or not fecha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Debe completar los campos de fecha y/o nivel piezométrico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
             return
 
         try:
@@ -504,22 +434,16 @@ class PiezometersView(QWidget):
             self.lbl_resultado3.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error al guardar los datos.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
     def guardar_np4(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         nivel_piezometrico = self.lbl_resultado4.text()
 
         if not nivel_piezometrico or not fecha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Debe completar los campos de fecha y/o nivel piezométrico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
             return
 
         try:
@@ -528,22 +452,16 @@ class PiezometersView(QWidget):
             self.lbl_resultado4.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error al guardar los datos.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
     def guardar_np5(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         nivel_piezometrico = self.lbl_resultado5.text()
 
         if not nivel_piezometrico or not fecha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Debe completar los campos de fecha y/o nivel piezométrico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
             return
 
         try:
@@ -552,22 +470,16 @@ class PiezometersView(QWidget):
             self.lbl_resultado5.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error al guardar los datos.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
     def guardar_np6(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         nivel_piezometrico = self.lbl_resultado6.text()
 
         if not nivel_piezometrico or not fecha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Debe completar los campos de fecha y/o nivel piezométrico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
             return
 
         try:
@@ -576,22 +488,16 @@ class PiezometersView(QWidget):
             self.lbl_resultado6.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error al guardar los datos.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
     def guardar_np7(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         nivel_piezometrico = self.lbl_resultado7.text()
 
         if not nivel_piezometrico or not fecha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Debe completar los campos de fecha y/o nivel piezométrico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
             return
 
         try:
@@ -600,8 +506,6 @@ class PiezometersView(QWidget):
             self.lbl_resultado7.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Error al guardar los datos.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")

@@ -1,7 +1,10 @@
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QMessageBox, QDateEdit
+from mysql.connector import IntegrityError
+
 import Calculadora
+from DataBase.Query import Query
 
 class AforadoresView(QWidget):
 
@@ -19,7 +22,7 @@ class AforadoresView(QWidget):
         lbl_aforador1 = QLabel("AFo3-EI:", self)
         lbl_aforador1.setFixedWidth(60)
         lbl_aforador2 = QLabel("AFo3-TOT:", self)
-        lbl_aforador2.setFixedWidth(60)
+        lbl_aforador2.setFixedWidth(65)
         lbl_aforador3 = QLabel("AFo3-PP:", self)
         lbl_aforador3.setFixedWidth(60)
         lbl_titulo_parshall = QLabel("Aforador Parshall", self)
@@ -28,22 +31,34 @@ class AforadoresView(QWidget):
         lbl_descripcion2 = QLabel("ha: Tirante medido en la zona de convergencia [m]", self)
         lbl_ha = QLabel("ha", self)
         lbl_ha.setFixedWidth(60)
+        #
         self.lbl_caudal1 = QLabel("Q1 = ")
         self.lbl_caudal1.setFixedWidth(60)
         self.lbl_resultado1 = QLabel("")
-        self.lbl_resultado1.setFixedWidth(160)
+        self.lbl_resultado1.setFixedWidth(100)
+        self.lbl_ls1 = QLabel("l/s")
+        self.lbl_ls1.setFixedWidth(55)
+        #
         self.lbl_caudal2 = QLabel("Q2 = ")
         self.lbl_caudal2.setFixedWidth(60)
         self.lbl_resultado2 = QLabel("")
         self.lbl_resultado2.setFixedWidth(160)
+        self.lbl_ls2 = QLabel("l/s")
+        self.lbl_ls2.setFixedWidth(55)
+        #
         self.lbl_caudal3 = QLabel("Q3 = ")
         self.lbl_caudal3.setFixedWidth(60)
         self.lbl_resultado3 = QLabel("")
         self.lbl_resultado3.setFixedWidth(160)
+        self.lbl_ls3 = QLabel("l/s")
+        self.lbl_ls3.setFixedWidth(55)
+        #
         self.lbl_caudal_parshall = QLabel("Q = ")
         self.lbl_caudal_parshall.setFixedWidth(60)
         self.lbl_resultado4 = QLabel("")
-        self.lbl_resultado4.setFixedWidth(160)
+        self.lbl_resultado4.setFixedWidth(100)
+        self.lbl_m3s = QLabel("m3/s")
+        self.lbl_m3s.setFixedWidth(55)
 
         self.date_edit = QDateEdit(self)
         self.date_edit.setFixedWidth(160)
@@ -99,6 +114,7 @@ class AforadoresView(QWidget):
 
         hlyt_fila1a.addWidget(self.lbl_caudal1)
         hlyt_fila1a.addWidget(self.lbl_resultado1)
+        hlyt_fila1a.addWidget(self.lbl_ls1)
         hlyt_fila1a.addWidget(self.btn_guardar_q1)
 
         hlyt_fila2.addWidget(lbl_aforador2)
@@ -108,6 +124,7 @@ class AforadoresView(QWidget):
 
         hlyt_fila2a.addWidget(self.lbl_caudal2)
         hlyt_fila2a.addWidget(self.lbl_resultado2)
+        hlyt_fila2a.addWidget(self.lbl_ls2)
         hlyt_fila2a.addWidget(self.btn_guardar_q2)
 
         hlyt_fila3.addWidget(lbl_aforador3)
@@ -117,6 +134,7 @@ class AforadoresView(QWidget):
 
         hlyt_fila3a.addWidget(self.lbl_caudal3)
         hlyt_fila3a.addWidget(self.lbl_resultado3)
+        hlyt_fila3a.addWidget(self.lbl_ls3)
         hlyt_fila3a.addWidget(self.btn_guardar_q3)
 
         hlyt_fila4.addWidget(lbl_ha)
@@ -125,6 +143,7 @@ class AforadoresView(QWidget):
 
         hlyt_fila4a.addWidget(self.lbl_caudal_parshall)
         hlyt_fila4a.addWidget(self.lbl_resultado4)
+        hlyt_fila4a.addWidget(self.lbl_m3s)
         hlyt_fila4a.addWidget(self.btn_guardar_q4)
 
         vlyt_principal = QVBoxLayout(self)
@@ -151,6 +170,10 @@ class AforadoresView(QWidget):
         self.btn_calcular_q2.clicked.connect(self.calcular_q2)
         self.btn_calcular_q3.clicked.connect(self.calcular_q3)
         self.btn_calcular_parshall.clicked.connect(self.calcular_q4)
+        self.btn_guardar_q1.clicked.connect(self.guardar_q1)
+        self.btn_guardar_q2.clicked.connect(self.guardar_q2)
+        self.btn_guardar_q3.clicked.connect(self.guardar_q3)
+        self.btn_guardar_q4.clicked.connect(self.guardar_q4)
 
     def calcular_q1(self):
         volumen = self.lned_volumen1.text()
@@ -158,26 +181,18 @@ class AforadoresView(QWidget):
         decimales = 2
 
         if not volumen or not tiempo:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, complete los campos numéricos.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, complete los campos numéricos.")
             return
 
         try:
             volumen = float(volumen)
             tiempo = float(tiempo)
             resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
-            self.lbl_resultado1.setText(f"{resultado:.{decimales}f} l/seg")
+            self.lbl_resultado1.setText(f"{resultado:.{decimales}f}")
             self.lned_volumen1.clear()
             self.lned_tiempo1.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_q2(self):
         volumen = self.lned_volumen2.text()
@@ -185,26 +200,18 @@ class AforadoresView(QWidget):
         decimales = 2
 
         if not volumen or not tiempo:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, complete los campos numéricos.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, complete los campos numéricos.")
             return
 
         try:
             volumen = float(volumen)
             tiempo = float(tiempo)
             resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
-            self.lbl_resultado2.setText(f"{resultado:.{decimales}f} l/seg")
+            self.lbl_resultado2.setText(f"{resultado:.{decimales}f}")
             self.lned_volumen2.clear()
             self.lned_tiempo2.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_q3(self):
         volumen = self.lned_volumen3.text()
@@ -212,47 +219,106 @@ class AforadoresView(QWidget):
         decimales = 2
 
         if not volumen or not tiempo:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, complete los campos numéricos.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, complete los campos numéricos.")
             return
 
         try:
             volumen = float(volumen)
             tiempo = float(tiempo)
             resultado = Calculadora.Calculadora().calcular_caudal(volumen, tiempo)
-            self.lbl_resultado3.setText(f"{resultado:.{decimales}f} l/seg")
+            self.lbl_resultado3.setText(f"{resultado:.{decimales}f}")
             self.lned_volumen3.clear()
             self.lned_tiempo3.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
     def calcular_q4(self):
         ha = self.lned_ha.text()
         decimales = 2
 
         if not ha:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, complete el campo numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, complete los campos numéricos.")
             return
 
         try:
             ha = float(ha)
             resultado = Calculadora.Calculadora().calcular_caudal_parshall(ha)
-            self.lbl_resultado4.setText(f"{resultado:.{decimales}f} m3/seg")
+            self.lbl_resultado4.setText(f"{resultado:.{decimales}f}")
             self.lned_ha.clear()
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
+
+    def guardar_q1(self):
+        fecha = self.date_edit.date().toString("yyyy-MM-dd")
+        caudal = self.lbl_resultado1.text()
+
+        if not caudal or not fecha:
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o caudal.")
+            return
+
+        try:
+            caudal = float(caudal)
+            Query.insert_data_afo3_ei(fecha, caudal)
+            self.lbl_resultado1.clear()
+            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+        except ValueError:
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+
+    def guardar_q2(self):
+        fecha = self.date_edit.date().toString("yyyy-MM-dd")
+        caudal = self.lbl_resultado2.text()
+
+        if not caudal or not fecha:
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o caudal.")
+            return
+
+        try:
+            caudal = float(caudal)
+            Query.insert_data_afo3_tot(fecha, caudal)
+            self.lbl_resultado2.clear()
+            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+        except ValueError:
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error",
+                                 "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+
+    def guardar_q3(self):
+        fecha = self.date_edit.date().toString("yyyy-MM-dd")
+        caudal = self.lbl_resultado3.text()
+
+        if not caudal or not fecha:
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o caudal.")
+            return
+
+        try:
+            caudal = float(caudal)
+            Query.insert_data_afo3_pp(fecha, caudal)
+            self.lbl_resultado3.clear()
+            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+        except ValueError:
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error",
+                                 "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+
+    def guardar_q4(self):
+        fecha = self.date_edit.date().toString("yyyy-MM-dd")
+        caudal = self.lbl_resultado4.text()
+
+        if not caudal or not fecha:
+            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o caudal.")
+            return
+
+        try:
+            caudal = float(caudal)
+            Query.insert_data_parshall(fecha, caudal)
+            self.lbl_resultado4.clear()
+            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+        except ValueError:
+            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+        except IntegrityError as e:
+            QMessageBox.critical(self, "Error",
+                                 "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")

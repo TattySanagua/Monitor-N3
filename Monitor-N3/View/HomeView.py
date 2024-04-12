@@ -65,11 +65,7 @@ class HomeView(QWidget):
         nivel_ambalse = self.lned_nivel_embalse.text()
 
         if not nivel_ambalse:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Por favor, ingrese un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
             return
 
         try:
@@ -78,8 +74,4 @@ class HomeView(QWidget):
             self.lned_nivel_embalse.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
         except ValueError:
-            error_dialog = QMessageBox()
-            error_dialog.setIcon(QMessageBox.Warning)
-            error_dialog.setWindowTitle("Error")
-            error_dialog.setText("Valor ingresado no válido. Debe ser un valor numérico.")
-            error_dialog.exec_()
+            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
