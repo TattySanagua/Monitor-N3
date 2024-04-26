@@ -2,14 +2,17 @@ from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QMessageBox, QDateEdit
 from mysql.connector import IntegrityError
-
-import Calculadora
 from DataBase.Query import Query
+from Signals.DataUpdater import DataUpdater
+import Calculadora
 
 class PiezometersView(QWidget):
-    def __init__(self):
+    def __init__(self, tabla_embalse_7piezometros):
         super(PiezometersView, self).__init__()
         self.setup_ui()
+        self.tabla_embalse_7piezometros = tabla_embalse_7piezometros
+        self.data_updater = DataUpdater()
+        self.data_updater.data_updated_signal.connect(self.actualizar_tabla)
 
     def setup_ui(self):
 
@@ -397,6 +400,7 @@ class PiezometersView(QWidget):
             Query.insert_data_l3_pc1(fecha, nivel_piezometrico)
             self.lbl_resultado1.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -415,6 +419,7 @@ class PiezometersView(QWidget):
             Query.insert_data_l3_pc2(fecha, nivel_piezometrico)
             self.lbl_resultado2.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -433,6 +438,7 @@ class PiezometersView(QWidget):
             Query.insert_data_l3_pc3(fecha, nivel_piezometrico)
             self.lbl_resultado3.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -451,6 +457,7 @@ class PiezometersView(QWidget):
             Query.insert_data_l3_pc4(fecha, nivel_piezometrico)
             self.lbl_resultado4.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -469,6 +476,7 @@ class PiezometersView(QWidget):
             Query.insert_data_l3_pc5(fecha, nivel_piezometrico)
             self.lbl_resultado5.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -487,6 +495,7 @@ class PiezometersView(QWidget):
             Query.insert_data_l3_pc6(fecha, nivel_piezometrico)
             self.lbl_resultado6.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -505,7 +514,11 @@ class PiezometersView(QWidget):
             Query.insert_data_l3_pc7(fecha, nivel_piezometrico)
             self.lbl_resultado7.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
             QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+
+    def actualizar_tabla(self):
+        self.tabla_embalse_7piezometros.update_table()

@@ -1,16 +1,20 @@
-from PyQt5.QtCore import Qt, QDateTime, QDate
-from PyQt5.QtWidgets import QWidget, QLabel, QDateTimeEdit, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
-    QMessageBox, QDateEdit
+from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox, QDateEdit
 from mysql.connector import IntegrityError
-
-import Calculadora
 from DataBase.Query import Query
+from Signals.DataUpdater import DataUpdater
+import Calculadora
+
+
 
 class FreatimeterView(QWidget):
 
-    def __init__(self):
+    def __init__(self, tabla_freatimetro_view):
         super(FreatimeterView, self).__init__()
         self.setup_ui()
+        self.tabla_freatimetro_view = tabla_freatimetro_view
+        self.data_updater = DataUpdater()
+        self.data_updater.data_updated_signal.connect(self.actualizar_tabla)
 
     def setup_ui(self):
 
@@ -66,8 +70,11 @@ class FreatimeterView(QWidget):
         vlyt_principal.addLayout(hlyt_fila1)
         vlyt_principal.addLayout(hlyt_fila2)
 
+        self.data_updater = DataUpdater()
+
         self.btn_calcular_nf.clicked.connect(self.calcular_nf)
         self.btn_guardar_nf.clicked.connect(self.guardar_nf)
+        self.data_updater.data_updated_signal.connect(self.actualizar_tabla)
 
     def calcular_nf(self):
         cb = 599.07
@@ -99,7 +106,11 @@ class FreatimeterView(QWidget):
             Query.insert_data_l3_f1(fecha, nivel_freatico)
             self.lbl_resultado.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
             QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+
+    def actualizar_tabla(self):
+        self.tabla_freatimetro_view.update_table()

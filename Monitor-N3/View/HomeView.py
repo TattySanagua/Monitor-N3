@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout
     QTimeEdit, QMessageBox
 from DataBase.Query import Query
 
+
 class HomeView(QWidget):
     def __init__(self):
         super(HomeView,self).__init__()

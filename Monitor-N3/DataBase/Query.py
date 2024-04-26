@@ -16,6 +16,30 @@ class Query:
         results = database_manager.fetch_data(query)
         return results
 
+
+    @staticmethod
+    def get_embalse_7piezometros():
+        database_manager = DatabaseManager()
+        query = ("SELECT embalse.fecha, "
+                 "embalse.nivel_embalse, "
+                 "l3_pc1.nivel_piezometrico, "
+                 "l3_pc2.nivel_piezometrico, "
+                 "l3_pc3.nivel_piezometrico, "
+                 "l3_pc4.nivel_piezometrico, "
+                 "l3_pc5.nivel_piezometrico, "
+                 "l3_pc6.nivel_piezometrico, "
+                 "l3_pc7.nivel_piezometrico "
+                 "FROM embalse "
+                 "LEFT JOIN l3_pc1 ON embalse.fecha = l3_pc1.fecha "
+                 "LEFT JOIN l3_pc2 ON embalse.fecha = l3_pc2.fecha "
+                 "LEFT JOIN l3_pc3 ON embalse.fecha = l3_pc3.fecha "
+                 "LEFT JOIN l3_pc4 ON embalse.fecha = l3_pc4.fecha "
+                 "LEFT JOIN l3_pc5 ON embalse.fecha = l3_pc5.fecha "
+                 "LEFT JOIN l3_pc6 ON embalse.fecha = l3_pc6.fecha "
+                 "LEFT JOIN l3_pc7 ON embalse.fecha = l3_pc7.fecha ORDER BY embalse.fecha DESC;")
+        results = database_manager.fetch_data(query)
+        return results
+
     @staticmethod
     def get_l3_pc1():
         database_manager = DatabaseManager()
@@ -24,59 +48,29 @@ class Query:
         results = database_manager.fetch_data(query)
         return results
 
-    @staticmethod
-    def get_l3_pc2():
-        database_manager = DatabaseManager()
-        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
-                 "INNER JOIN l3_pc2 using(fecha);")
-        results = database_manager.fetch_data(query)
-        return results
-
-    @staticmethod
-    def get_l3_pc3():
-        database_manager = DatabaseManager()
-        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
-                 "INNER JOIN l3_pc3 using(fecha);")
-        results = database_manager.fetch_data(query)
-        return results
-
-    @staticmethod
-    def get_l3_pc4():
-        database_manager = DatabaseManager()
-        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
-                 "INNER JOIN l3_pc4 using(fecha);")
-        results = database_manager.fetch_data(query)
-        return results
-
-    @staticmethod
-    def get_l3_pc5():
-        database_manager = DatabaseManager()
-        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
-                 "INNER JOIN l3_pc5 using(fecha);")
-        results = database_manager.fetch_data(query)
-        return results
-
-    @staticmethod
-    def get_l3_pc6():
-        database_manager = DatabaseManager()
-        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
-                 "INNER JOIN l3_pc6 using(fecha);")
-        results = database_manager.fetch_data(query)
-        return results
-
-    @staticmethod
-    def get_l3_pc7():
-        database_manager = DatabaseManager()
-        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
-                 "INNER JOIN l3_pc7 using(fecha);")
-        results = database_manager.fetch_data(query)
-        return results
 
     @staticmethod
     def get_l3_f1():
         database_manager = DatabaseManager()
-        query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
-                 "INNER JOIN l3_f1 using(fecha);")
+        query = ("SELECT fecha, nivel_embalse, nivel_freatico FROM embalse "
+                 "INNER JOIN l3_f1 using(fecha) ORDER BY fecha DESC;")
+        results = database_manager.fetch_data(query)
+        return results
+
+    @staticmethod
+    def get_embalse_aforadores():
+        database_manager = DatabaseManager()
+        query = ("SELECT embalse.fecha, embalse.nivel_embalse, "
+                 "afo3_ei.caudal, "
+                 "afo3_pp.caudal, "
+                 "afo3_tot.caudal, "
+                 "parshall.caudal "
+                 "FROM embalse "
+                 "LEFT JOIN afo3_ei ON embalse.fecha = afo3_ei.fecha "
+                 "LEFT JOIN afo3_pp ON embalse.fecha = afo3_pp.fecha "
+                 "LEFT JOIN afo3_tot ON embalse.fecha = afo3_tot.fecha "
+                 "LEFT JOIN parshall ON embalse.fecha = parshall.fecha "
+                 "ORDER BY fecha DESC;")
         results = database_manager.fetch_data(query)
         return results
 

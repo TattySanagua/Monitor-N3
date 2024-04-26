@@ -2,15 +2,19 @@ from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QMessageBox, QDateEdit
 from mysql.connector import IntegrityError
-
-import Calculadora
 from DataBase.Query import Query
+from Signals.DataUpdater import DataUpdater
+import Calculadora
+
 
 class AforadoresView(QWidget):
 
-    def __init__(self):
+    def __init__(self, tabla_embalse_aforadores):
         super(AforadoresView, self).__init__()
         self.setup_ui()
+        self.tabla_embalse_aforadores = tabla_embalse_aforadores
+        self.data_updater = DataUpdater()
+        self.data_updater.data_updated_signal.connect(self.actualizar_tabla)
 
     def setup_ui(self):
 
@@ -261,6 +265,7 @@ class AforadoresView(QWidget):
             Query.insert_data_afo3_ei(fecha, caudal)
             self.lbl_resultado1.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -279,6 +284,7 @@ class AforadoresView(QWidget):
             Query.insert_data_afo3_tot(fecha, caudal)
             self.lbl_resultado2.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -298,6 +304,7 @@ class AforadoresView(QWidget):
             Query.insert_data_afo3_pp(fecha, caudal)
             self.lbl_resultado3.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
@@ -317,8 +324,12 @@ class AforadoresView(QWidget):
             Query.insert_data_parshall(fecha, caudal)
             self.lbl_resultado4.clear()
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.", QMessageBox.Ok)
+            self.data_updater.update_data()
         except ValueError:
             QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
             QMessageBox.critical(self, "Error",
                                  "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+
+    def actualizar_tabla(self):
+        self.tabla_embalse_aforadores.update_table()
