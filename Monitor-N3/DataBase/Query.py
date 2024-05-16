@@ -11,8 +11,14 @@ class Query:
     @staticmethod
     def get_precipiaciones():
         database_manager = DatabaseManager()
-        query = ("SELECT fecha, valor, tres_dias_previos, cinco_dias_previos, diez_dias_previos "
-                 "FROM precipitacion;")
+        query = ("SELECT embalse.fecha, embalse.nivel_embalse, "
+                     "precipitacion.valor, "
+                     "precipitacion.tres_dias_previos, "
+                     "precipitacion.cinco_dias_previos, "
+                     "precipitacion.diez_dias_previos "
+                     "FROM embalse "
+                     "LEFT JOIN precipitacion ON embalse.fecha = precipitacion.fecha "
+                     "ORDER BY fecha DESC;")
         results = database_manager.fetch_data(query)
         return results
 
@@ -80,6 +86,14 @@ class Query:
         query = (f"INSERT INTO embalse (fecha, hora, nivel_embalse) "
                  f"VALUES ('{fecha}', '{hora}', {nivel_ambalse});")
         database_manager.execute_query(query)
+
+    @staticmethod
+    def insert_data_precipitaciones(fecha, valor, tres, cinco, diez):
+        database_manager = DatabaseManager()
+        query = (f"INSERT INTO precipitacion (fecha, valor, tres_dias_previos, cinco_dias_previos, diez_dias_previos) "
+                 f"VALUES ('{fecha}', {valor}, {tres}, {cinco}, {diez});")
+        database_manager.execute_query(query)
+
     @staticmethod
     def insert_data_l3_pc1(fecha, nivel_piezometrico):
         database_manager = DatabaseManager()

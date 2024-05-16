@@ -1,13 +1,18 @@
 from PyQt5.QtCore import Qt, QDate, QTime
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QDateEdit, \
     QTimeEdit, QMessageBox
+from mysql.connector import IntegrityError
 from DataBase.Query import Query
+from Signals.DataUpdater import DataUpdater
 
 
 class HomeView(QWidget):
-    def __init__(self):
+    def __init__(self, tabla_embalse_precipitacion):
         super(HomeView,self).__init__()
         self.setup_ui()
+        self.tabla_embalse_precipitacion = tabla_embalse_precipitacion
+        self.data_updater = DataUpdater()
+        self.data_updater.data_updated_signal.connect(self.actualizar_tabla)
 
     def setup_ui(self):
 
@@ -63,16 +68,23 @@ class HomeView(QWidget):
     def guardar(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         hora = self.time_edit.time().toString("hh:mm:ss")
-        nivel_ambalse = self.lned_nivel_embalse.text()
+        nivel_embalse = self.lned_nivel_embalse.text()
 
-        if not nivel_ambalse:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
+        if not fecha or not nivel_embalse:
+            QMessageBox.warning(self, "Error", "Debe ingresar una fecha y/o nivel de embalse.")
             return
+        else:
+            try:
+                nivel_embalse = float(nivel_embalse)
+                Query.insert_data_embalse(fecha, hora, nivel_embalse)
+                self.lned_nivel_embalse.clear()
+                QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+                self.data_updater.update_data()
+            except ValueError:
+                QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+            except IntegrityError as e:
+                QMessageBox.critical(self, "Error",
+                                         "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
-        try:
-            nivel_ambalse = float(nivel_ambalse)
-            Query.insert_data_embalse(fecha, hora, nivel_ambalse)
-            self.lned_nivel_embalse.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
+    def actualizar_tabla(self):
+        self.tabla_embalse_precipitacion.update_table()

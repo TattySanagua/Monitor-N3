@@ -20,11 +20,6 @@ class PiezometersView(QWidget):
         lbl_fecha = QLabel("Fecha", self)
         lbl_fecha.setFixedWidth(60)
         lbl_titulo_piezometro = QLabel("Piezómetros", self)
-        # lbl_formula_piezometro = QLabel("Np = CB - [(-cos α) * L]", self)
-        # lbl_descripcion1 = QLabel("Np: Nivel piezométrico [msnm]", self)
-        # lbl_descripcion2 = QLabel("CB: Cota superior del tubo de elevación [msnm]", self)
-        # lbl_descripcion3 = QLabel("L: Lectura registrada con sonda electroacústica [m]", self)
-        # lbl_descripcion4 = QLabel("α: Ángulo cenital de instalación [°], α = 180°", self)
 
         lbl_piezometro1 = QLabel("L3-PC1:", self)
         lbl_piezometro1.setFixedWidth(60)
@@ -117,37 +112,13 @@ class PiezometersView(QWidget):
         self.lned_lectura_p7.setPlaceholderText("Lectura L7")
         self.lned_lectura_p7.setFixedWidth(160)
 
-        self.btn_calcular_np1 = QPushButton("Calcular", self)
-        self.btn_calcular_np1.setFixedWidth(120)
-        self.btn_calcular_np2 = QPushButton("Calcular", self)
-        self.btn_calcular_np2.setFixedWidth(120)
-        self.btn_calcular_np3 = QPushButton("Calcular", self)
-        self.btn_calcular_np3.setFixedWidth(120)
-        self.btn_calcular_np4 = QPushButton("Calcular", self)
-        self.btn_calcular_np4.setFixedWidth(120)
-        self.btn_calcular_np5 = QPushButton("Calcular", self)
-        self.btn_calcular_np5.setFixedWidth(120)
-        self.btn_calcular_np6 = QPushButton("Calcular", self)
-        self.btn_calcular_np6.setFixedWidth(120)
-        self.btn_calcular_np7 = QPushButton("Calcular", self)
-        self.btn_calcular_np7.setFixedWidth(120)
-        self.btn_guardar_np1 = QPushButton("Guardar Np1", self)
-        self.btn_guardar_np1.setFixedWidth(120)
-        self.btn_guardar_np2 = QPushButton("Guardar Np2", self)
-        self.btn_guardar_np2.setFixedWidth(120)
-        self.btn_guardar_np3 = QPushButton("Guardar Np3", self)
-        self.btn_guardar_np3.setFixedWidth(120)
-        self.btn_guardar_np4 = QPushButton("Guardar Np4", self)
-        self.btn_guardar_np4.setFixedWidth(120)
-        self.btn_guardar_np5 = QPushButton("Guardar Np5", self)
-        self.btn_guardar_np5.setFixedWidth(120)
-        self.btn_guardar_np6 = QPushButton("Guardar Np6", self)
-        self.btn_guardar_np6.setFixedWidth(120)
-        self.btn_guardar_np7 = QPushButton("Guardar Np7", self)
-        self.btn_guardar_np7.setFixedWidth(120)
+        self.btn_calcular_nps = QPushButton("Calcular", self)
+        self.btn_calcular_nps.setFixedWidth(120)
+
+        self.btn_guardar_nps = QPushButton("Guardar", self)
+        self.btn_guardar_nps.setFixedWidth(120)
 
         hlyt_fecha = QHBoxLayout()
-        #hlyt_formula_descripcion = QHBoxLayout()
         hlyt_fila1 = QHBoxLayout()
         hlyt_fila1a = QHBoxLayout()
         hlyt_fila2 = QHBoxLayout()
@@ -162,81 +133,61 @@ class PiezometersView(QWidget):
         hlyt_fila6a = QHBoxLayout()
         hlyt_fila7 = QHBoxLayout()
         hlyt_fila7a = QHBoxLayout()
+        hlyt_fila8 = QHBoxLayout()
 
         hlyt_fecha.addWidget(lbl_fecha)
         hlyt_fecha.addWidget(self.date_edit)
 
         hlyt_fila1.addWidget(lbl_piezometro1)
         hlyt_fila1.addWidget(self.lned_lectura_p1)
-        hlyt_fila1.addWidget(self.btn_calcular_np1)
         hlyt_fila1a.addWidget(self.lbl_Np1)
         hlyt_fila1a.addWidget(self.lbl_resultado1)
         hlyt_fila1a.addWidget(self.lbl_msnm1)
-        hlyt_fila1a.addWidget(self.btn_guardar_np1)
 
         hlyt_fila2.addWidget(lbl_piezometro2)
         hlyt_fila2.addWidget(self.lned_lectura_p2)
-        hlyt_fila2.addWidget(self.btn_calcular_np2)
         hlyt_fila2a.addWidget(self.lbl_Np2)
         hlyt_fila2a.addWidget(self.lbl_resultado2)
         hlyt_fila2a.addWidget(self.lbl_msnm2)
-        hlyt_fila2a.addWidget(self.btn_guardar_np2)
 
         hlyt_fila3.addWidget(lbl_piezometro3)
         hlyt_fila3.addWidget(self.lned_lectura_p3)
-        hlyt_fila3.addWidget(self.btn_calcular_np3)
         hlyt_fila3a.addWidget(self.lbl_Np3)
         hlyt_fila3a.addWidget(self.lbl_resultado3)
         hlyt_fila3a.addWidget(self.lbl_msnm3)
-        hlyt_fila3a.addWidget(self.btn_guardar_np3)
 
         hlyt_fila4.addWidget(lbl_piezometro4)
         hlyt_fila4.addWidget(self.lned_lectura_p4)
-        hlyt_fila4.addWidget(self.btn_calcular_np4)
         hlyt_fila4a.addWidget(self.lbl_Np4)
         hlyt_fila4a.addWidget(self.lbl_resultado4)
         hlyt_fila4a.addWidget(self.lbl_msnm4)
-        hlyt_fila4a.addWidget(self.btn_guardar_np4)
 
         hlyt_fila5.addWidget(lbl_piezometro5)
         hlyt_fila5.addWidget(self.lned_lectura_p5)
-        hlyt_fila5.addWidget(self.btn_calcular_np5)
         hlyt_fila5a.addWidget(self.lbl_Np5)
         hlyt_fila5a.addWidget(self.lbl_resultado5)
         hlyt_fila5a.addWidget(self.lbl_msnm5)
-        hlyt_fila5a.addWidget(self.btn_guardar_np5)
 
         hlyt_fila6.addWidget(lbl_piezometro6)
         hlyt_fila6.addWidget(self.lned_lectura_p6)
-        hlyt_fila6.addWidget(self.btn_calcular_np6)
         hlyt_fila6a.addWidget(self.lbl_Np6)
         hlyt_fila6a.addWidget(self.lbl_resultado6)
         hlyt_fila6a.addWidget(self.lbl_msnm6)
-        hlyt_fila6a.addWidget(self.btn_guardar_np6)
 
         hlyt_fila7.addWidget(lbl_piezometro7)
         hlyt_fila7.addWidget(self.lned_lectura_p7)
-        hlyt_fila7.addWidget(self.btn_calcular_np7)
         hlyt_fila7a.addWidget(self.lbl_Np7)
         hlyt_fila7a.addWidget(self.lbl_resultado7)
         hlyt_fila7a.addWidget(self.lbl_msnm7)
-        hlyt_fila7a.addWidget(self.btn_guardar_np7)
 
-        # vlyt_descripcion = QVBoxLayout()
-        # vlyt_descripcion.addWidget(lbl_descripcion1)
-        # vlyt_descripcion.addWidget(lbl_descripcion2)
-        # vlyt_descripcion.addWidget(lbl_descripcion3)
-        # vlyt_descripcion.addWidget(lbl_descripcion4)
-        #
-        # hlyt_formula_descripcion.addWidget(lbl_formula_piezometro)
-        # hlyt_formula_descripcion.addLayout(vlyt_descripcion)
+        hlyt_fila8.addWidget(self.btn_calcular_nps)
+        hlyt_fila8.addWidget(self.btn_guardar_nps)
 
         vlyt_principal = QVBoxLayout(self)
         vlyt_principal.setAlignment(Qt.AlignVCenter)
         vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)
         vlyt_principal.addLayout(hlyt_fecha)
         vlyt_principal.addWidget(lbl_titulo_piezometro, alignment=Qt.AlignCenter)
-        # vlyt_principal.addLayout(hlyt_formula_descripcion)
         vlyt_principal.addLayout(hlyt_fila1)
         vlyt_principal.addLayout(hlyt_fila1a)
         vlyt_principal.addLayout(hlyt_fila2)
@@ -251,274 +202,111 @@ class PiezometersView(QWidget):
         vlyt_principal.addLayout(hlyt_fila6a)
         vlyt_principal.addLayout(hlyt_fila7)
         vlyt_principal.addLayout(hlyt_fila7a)
+        vlyt_principal.addLayout(hlyt_fila8)
 
-        self.btn_calcular_np1.clicked.connect(self.calcular_np1)
-        self.btn_calcular_np2.clicked.connect(self.calcular_np2)
-        self.btn_calcular_np3.clicked.connect(self.calcular_np3)
-        self.btn_calcular_np4.clicked.connect(self.calcular_np4)
-        self.btn_calcular_np5.clicked.connect(self.calcular_np5)
-        self.btn_calcular_np6.clicked.connect(self.calcular_np6)
-        self.btn_calcular_np7.clicked.connect(self.calcular_np7)
-        self.btn_guardar_np1.clicked.connect(self.guardar_np1)
-        self.btn_guardar_np2.clicked.connect(self.guardar_np2)
-        self.btn_guardar_np3.clicked.connect(self.guardar_np3)
-        self.btn_guardar_np4.clicked.connect(self.guardar_np4)
-        self.btn_guardar_np5.clicked.connect(self.guardar_np5)
-        self.btn_guardar_np6.clicked.connect(self.guardar_np6)
-        self.btn_guardar_np7.clicked.connect(self.guardar_np7)
+        self.btn_calcular_nps.clicked.connect(self.calcular_nps)
+        self.btn_guardar_nps.clicked.connect(self.guardar_nps)
 
 
-    def calcular_np1(self):
-        cb = 605.22
-        lectura = self.lned_lectura_p1.text()
+    def calcular_nps(self):
+        cb_values = [605.22, 604.24, 603.88, 600.60, 616.32, 616.17, 616.02]
+
+        lectura_widgets = [
+            self.lned_lectura_p1,
+            self.lned_lectura_p2,
+            self.lned_lectura_p3,
+            self.lned_lectura_p4,
+            self.lned_lectura_p5,
+            self.lned_lectura_p6,
+            self.lned_lectura_p7
+        ]
+
+        resultado_widgets = [
+            self.lbl_resultado1,
+            self.lbl_resultado2,
+            self.lbl_resultado3,
+            self.lbl_resultado4,
+            self.lbl_resultado5,
+            self.lbl_resultado6,
+            self.lbl_resultado7
+        ]
+
         decimales = 2
 
-        if not lectura:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
-            return
+        for index, cb in enumerate(cb_values):
+            lectura_widget = lectura_widgets[index]
+            resultado_widget = resultado_widgets[index]
 
-        try:
-            lectura = float(lectura)
-            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-            self.lbl_resultado1.setText(f"{resultado:.{decimales}f}")
-            self.lned_lectura_p1.clear()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
+            lectura = lectura_widget.text()
 
-    def calcular_np2(self):
-        cb = 604.24
-        lectura = self.lned_lectura_p2.text()
-        decimales = 2
+            if not lectura:
+                resultado_widget.setText("")
+                lectura_widget.clear()
+            else:
+                try:
+                    lectura = float(lectura)
+                    resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+                    resultado_widget.setText(f"{resultado:.{decimales}f}")
+                    lectura_widget.clear()
+                except ValueError:
+                    QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
 
-        if not lectura:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
-            return
 
-        try:
-            lectura = float(lectura)
-            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-            self.lbl_resultado2.setText(f"{resultado:.{decimales}f}")
-            self.lned_lectura_p2.clear()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
+    def guardar_nps(self):
+        resultado_widgets = [
+            self.lbl_resultado1,
+            self.lbl_resultado2,
+            self.lbl_resultado3,
+            self.lbl_resultado4,
+            self.lbl_resultado5,
+            self.lbl_resultado6,
+            self.lbl_resultado7
+        ]
 
-    def calcular_np3(self):
-        cb = 603.88
-        lectura = self.lned_lectura_p3.text()
-        decimales = 2
+        insert_por_piezometro = [
+            Query.insert_data_l3_pc1,
+            Query.insert_data_l3_pc2,
+            Query.insert_data_l3_pc3,
+            Query.insert_data_l3_pc4,
+            Query.insert_data_l3_pc5,
+            Query.insert_data_l3_pc6,
+            Query.insert_data_l3_pc7
+        ]
 
-        if not lectura:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
-            return
-
-        try:
-            lectura = float(lectura)
-            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-            self.lbl_resultado3.setText(f"{resultado:.{decimales}f}")
-            self.lned_lectura_p3.clear()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
-
-    def calcular_np4(self):
-        cb = 600.60
-        lectura = self.lned_lectura_p4.text()
-        decimales = 2
-
-        if not lectura:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
-            return
-
-        try:
-            lectura = float(lectura)
-            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-            self.lbl_resultado4.setText(f"{resultado:.{decimales}f}")
-            self.lned_lectura_p4.clear()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
-
-    def calcular_np5(self):
-        cb = 616.32
-        lectura = self.lned_lectura_p5.text()
-        decimales = 2
-
-        if not lectura:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
-            return
-
-        try:
-            lectura = float(lectura)
-            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-            self.lbl_resultado5.setText(f"{resultado:.{decimales}f}")
-            self.lned_lectura_p5.clear()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
-
-    def calcular_np6(self):
-        cb = 616.17
-        lectura = self.lned_lectura_p6.text()
-        decimales = 2
-
-        if not lectura:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
-            return
-
-        try:
-            lectura = float(lectura)
-            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-            self.lbl_resultado6.setText(f"{resultado:.{decimales}f}")
-            self.lned_lectura_p6.clear()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
-
-    def calcular_np7(self):
-        cb = 616.02
-        lectura = self.lned_lectura_p7.text()
-        decimales = 2
-
-        if not lectura:
-            QMessageBox.warning(self, "Error", "Por favor, ingrese un valor numérico.")
-            return
-
-        try:
-            lectura = float(lectura)
-            resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
-            self.lbl_resultado7.setText(f"{resultado:.{decimales}f}")
-            self.lned_lectura_p7.clear()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Valor ingresado no válido. Debe ser un valor numérico.")
-
-    def guardar_np1(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
-        nivel_piezometrico = self.lbl_resultado1.text()
-
-        if not nivel_piezometrico or not fecha:
-            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
+        if not fecha:
+            QMessageBox.warning(self, "Error", "Debe ingresar una fecha.")
             return
 
-        try:
-            nivel_piezometrico = float(nivel_piezometrico)
-            Query.insert_data_l3_pc1(fecha, nivel_piezometrico)
-            self.lbl_resultado1.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-            self.data_updater.update_data()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
-        except IntegrityError as e:
-            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+        todos_null = all(widget.text() == "" for widget in resultado_widgets)
+        if todos_null:
+            respuesta = QMessageBox.question(self, "Advertencia",
+                                             "¿Está seguro que desea guardar todos los niveles piezométricos en nulo?",
+                                             QMessageBox.Yes | QMessageBox.No)
+            if respuesta == QMessageBox.No:
+                return
 
-    def guardar_np2(self):
-        fecha = self.date_edit.date().toString("yyyy-MM-dd")
-        nivel_piezometrico = self.lbl_resultado2.text()
+        for index, (widget, insert) in enumerate(zip(resultado_widgets, insert_por_piezometro), start=1):
+            nivel_piezometrico = widget.text()
 
-        if not nivel_piezometrico or not fecha:
-            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
-            return
+            if nivel_piezometrico:
+                try:
+                    nivel_piezometrico = float(nivel_piezometrico)
+                    insert(fecha, nivel_piezometrico)
+                    widget.clear()
+                except ValueError:
+                    QMessageBox.critical(self, "Error", "Error al guardar los datos.")
+                except IntegrityError as e:
+                    QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+            else:
+                try:
+                    insert(fecha, "NULL")
+                except IntegrityError as e:
+                    QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
-        try:
-            nivel_piezometrico = float(nivel_piezometrico)
-            Query.insert_data_l3_pc2(fecha, nivel_piezometrico)
-            self.lbl_resultado2.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-            self.data_updater.update_data()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
-        except IntegrityError as e:
-            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+        QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
+        self.data_updater.update_data()
 
-    def guardar_np3(self):
-        fecha = self.date_edit.date().toString("yyyy-MM-dd")
-        nivel_piezometrico = self.lbl_resultado3.text()
-
-        if not nivel_piezometrico or not fecha:
-            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
-            return
-
-        try:
-            nivel_piezometrico = float(nivel_piezometrico)
-            Query.insert_data_l3_pc3(fecha, nivel_piezometrico)
-            self.lbl_resultado3.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-            self.data_updater.update_data()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
-        except IntegrityError as e:
-            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
-
-    def guardar_np4(self):
-        fecha = self.date_edit.date().toString("yyyy-MM-dd")
-        nivel_piezometrico = self.lbl_resultado4.text()
-
-        if not nivel_piezometrico or not fecha:
-            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
-            return
-
-        try:
-            nivel_piezometrico = float(nivel_piezometrico)
-            Query.insert_data_l3_pc4(fecha, nivel_piezometrico)
-            self.lbl_resultado4.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-            self.data_updater.update_data()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
-        except IntegrityError as e:
-            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
-
-    def guardar_np5(self):
-        fecha = self.date_edit.date().toString("yyyy-MM-dd")
-        nivel_piezometrico = self.lbl_resultado5.text()
-
-        if not nivel_piezometrico or not fecha:
-            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
-            return
-
-        try:
-            nivel_piezometrico = float(nivel_piezometrico)
-            Query.insert_data_l3_pc5(fecha, nivel_piezometrico)
-            self.lbl_resultado5.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-            self.data_updater.update_data()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
-        except IntegrityError as e:
-            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
-
-    def guardar_np6(self):
-        fecha = self.date_edit.date().toString("yyyy-MM-dd")
-        nivel_piezometrico = self.lbl_resultado6.text()
-
-        if not nivel_piezometrico or not fecha:
-            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
-            return
-
-        try:
-            nivel_piezometrico = float(nivel_piezometrico)
-            Query.insert_data_l3_pc6(fecha, nivel_piezometrico)
-            self.lbl_resultado6.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-            self.data_updater.update_data()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
-        except IntegrityError as e:
-            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
-
-    def guardar_np7(self):
-        fecha = self.date_edit.date().toString("yyyy-MM-dd")
-        nivel_piezometrico = self.lbl_resultado7.text()
-
-        if not nivel_piezometrico or not fecha:
-            QMessageBox.warning(self, "Error", "Debe completar los campos de fecha y/o nivel piezométrico.")
-            return
-
-        try:
-            nivel_piezometrico = float(nivel_piezometrico)
-            Query.insert_data_l3_pc7(fecha, nivel_piezometrico)
-            self.lbl_resultado7.clear()
-            QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
-            self.data_updater.update_data()
-        except ValueError:
-            QMessageBox.critical(self, "Error", "Error al guardar los datos.")
-        except IntegrityError as e:
-            QMessageBox.critical(self, "Error", "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
 
     def actualizar_tabla(self):
         self.tabla_embalse_7piezometros.update_table()

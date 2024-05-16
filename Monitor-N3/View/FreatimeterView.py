@@ -48,19 +48,20 @@ class FreatimeterView(QWidget):
         hlyt_fecha = QHBoxLayout()
         hlyt_fila1 = QHBoxLayout()
         hlyt_fila2 = QHBoxLayout()
+        hlyt_fila3 = QHBoxLayout()
 
         hlyt_fecha.addWidget(lbl_fecha)
         hlyt_fecha.addWidget(self.date_edit)
 
         hlyt_fila1.addWidget(lbl_freatimetro)
         hlyt_fila1.addWidget(self.lned_lectura_f)
-        hlyt_fila1.addWidget(self.btn_calcular_nf)
-
 
         hlyt_fila2.addWidget(self.lbl_Nf)
         hlyt_fila2.addWidget(self.lbl_resultado)
         hlyt_fila2.addWidget(self.lbl_msnm)
-        hlyt_fila2.addWidget(self.btn_guardar_nf)
+
+        hlyt_fila3.addWidget(self.btn_calcular_nf)
+        hlyt_fila3.addWidget(self.btn_guardar_nf)
 
         vlyt_principal = QVBoxLayout(self)
         vlyt_principal.setAlignment(Qt.AlignVCenter)
@@ -69,6 +70,7 @@ class FreatimeterView(QWidget):
         vlyt_principal.addWidget(lbl_titulo_freatimetro, alignment=Qt.AlignCenter)
         vlyt_principal.addLayout(hlyt_fila1)
         vlyt_principal.addLayout(hlyt_fila2)
+        vlyt_principal.addLayout(hlyt_fila3)
 
         self.data_updater = DataUpdater()
 

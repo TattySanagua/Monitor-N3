@@ -2,9 +2,11 @@ from PyQt5.QtWidgets import QApplication, QAction, QMainWindow
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
 from View.HomeView import HomeView
+from View.PrecipitacionView import PrecipitacionView
 from View.PiezometersView import PiezometersView
 from View.FreatimeterView import FreatimeterView
 from View.AforadoresView import AforadoresView
+from View.TableEmbalseView import TablaEmbalseView
 from View.TablePiezometerView import TablaPiezometrosView
 from View.TableFreatimiterView import TablaFreatimetroView
 from View.TableAforadorView import TablaAforadoresView
@@ -19,9 +21,14 @@ class Monitor(QMainWindow):
         # screen_size = QDesktopWidget().screenGeometry()
         self.setGeometry(50, 50, 450, 650)
         self.setWindowIcon(QIcon("LogoOrsep.jpg"))
+        self.tabla_embalse_precipitacion = TablaEmbalseView()
+        self.home_view = HomeView(self.tabla_embalse_precipitacion)
+
         self.create_menu()
-        self.central_widget = HomeView()
+        self.central_widget = HomeView(self.tabla_embalse_precipitacion)
         self.setCentralWidget(self.central_widget)
+
+
 
         self.tabla_freatimetro_view = TablaFreatimetroView()
         self.freatimeter_view = FreatimeterView(self.tabla_freatimetro_view)
@@ -41,8 +48,16 @@ class Monitor(QMainWindow):
         menu_aforadores = menu_bar.addMenu("Aforadores")
 
         #Acciones
-        action_inicio = QAction("Inicio", self)
+        action_inicio = QAction("Embalse", self)
         action_inicio.triggered.connect(self.show_home_view)
+        menu_inicio.addAction(action_inicio)
+
+        action_inicio = QAction("Precipitación", self)
+        action_inicio.triggered.connect(self.show_precipitacion_view)
+        menu_inicio.addAction(action_inicio)
+
+        action_inicio = QAction("Tabla", self)
+        action_inicio.triggered.connect(self.show_tabla_embalse_view)
         menu_inicio.addAction(action_inicio)
 
         action_piezometros = QAction("Medición", self)
@@ -82,8 +97,16 @@ class Monitor(QMainWindow):
         menu_aforadores.addAction(action_aforadores)
 
     def show_home_view(self):
-        self.central_widget = HomeView()
+        self.central_widget = HomeView(self.tabla_embalse_precipitacion)
         self.setCentralWidget(self.central_widget)
+
+    def show_precipitacion_view(self):
+        self.central_widget = PrecipitacionView(self.tabla_embalse_precipitacion)
+        self.setCentralWidget(self.central_widget)
+    def show_tabla_embalse_view(self):
+        if not self.tabla_embalse_precipitacion:
+            self.tabla_embalse_precipitacion = TablaEmbalseView()
+        self.tabla_embalse_precipitacion.show()
     def show_piezometros_view(self):
         self.central_widget = PiezometersView(self.tabla_embalse_7piezometros)
         self.setCentralWidget(self.central_widget)
