@@ -8,8 +8,9 @@ from View.FreatimeterView import FreatimeterView
 from View.AforadoresView import AforadoresView
 from View.TableEmbalseView import TablaEmbalseView
 from View.TablePiezometerView import TablaPiezometrosView
-from View.TableFreatimiterView import TablaFreatimetroView
+from View.TableFreatimeterView import TablaFreatimetroView
 from View.TableAforadorView import TablaAforadoresView
+from View.GraphEmbalseView import GraphEmbalseView
 import sys
 
 class Monitor(QMainWindow):
@@ -39,6 +40,8 @@ class Monitor(QMainWindow):
         self.tabla_embalse_aforadores = TablaAforadoresView()
         self.aforadores_view = AforadoresView(self.tabla_embalse_aforadores)
 
+        self.graph_embalse_view = GraphEmbalseView()
+
     def create_menu(self):
         #Menu bar
         menu_bar = self.menuBar()
@@ -60,6 +63,10 @@ class Monitor(QMainWindow):
         action_inicio.triggered.connect(self.show_tabla_embalse_view)
         menu_inicio.addAction(action_inicio)
 
+        action_inicio = QAction("Gráficos", self)
+        action_inicio.triggered.connect(self.show_grafico_embalse_view)
+        menu_inicio.addAction(action_inicio)
+
         action_piezometros = QAction("Medición", self)
         action_piezometros.triggered.connect(self.show_piezometros_view)
         menu_piezometros.addAction(action_piezometros)
@@ -68,7 +75,7 @@ class Monitor(QMainWindow):
         action_piezometros.triggered.connect(self.show_tablas_piezometros_view)
         menu_piezometros.addAction(action_piezometros)
 
-        action_piezometros = QAction("Gráfico", self)
+        action_piezometros = QAction("Gráficos", self)
         action_piezometros.triggered.connect(self.show_grafico_piezometro_view)
         menu_piezometros.addAction(action_piezometros)
 
@@ -80,7 +87,7 @@ class Monitor(QMainWindow):
         action_freatimetro.triggered.connect(self.show_tabla_freatimetro_view)
         menu_freatimetro.addAction(action_freatimetro)
 
-        action_freatimetro = QAction("Gráfico", self)
+        action_freatimetro = QAction("Gráficos", self)
         action_freatimetro.triggered.connect(self.show_grafico_freatimetro_view)
         menu_freatimetro.addAction(action_freatimetro)
 
@@ -92,7 +99,7 @@ class Monitor(QMainWindow):
         action_aforadores.triggered.connect(self.show_tablas_aforadores_view)
         menu_aforadores.addAction(action_aforadores)
 
-        action_aforadores = QAction("Gráfico", self)
+        action_aforadores = QAction("Gráficos", self)
         action_aforadores.triggered.connect(self.show_grafico_aforadores_view)
         menu_aforadores.addAction(action_aforadores)
 
@@ -107,6 +114,9 @@ class Monitor(QMainWindow):
         if not self.tabla_embalse_precipitacion:
             self.tabla_embalse_precipitacion = TablaEmbalseView()
         self.tabla_embalse_precipitacion.show()
+
+    def show_grafico_embalse_view(self):
+        self.graph_embalse_view.show()
     def show_piezometros_view(self):
         self.central_widget = PiezometersView(self.tabla_embalse_7piezometros)
         self.setCentralWidget(self.central_widget)

@@ -18,6 +18,15 @@ class TablaAforadoresView(QMainWindow):
         self.tableWidget.clear()
         data = Query.get_embalse_aforadores()
 
+        if not data:  # Verificar si data está vacío
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
+            column_names = ["Fecha", "Nivel de embalse [msnm]", "Caudal AFo3-EI [l/s]", "Caudal AFo3-PP [l/s]",
+                            "Caudal AFo3-TOT [l/s]", "Caudal Parshall[m3/s]"]
+
+            self.tableWidget.setHorizontalHeaderLabels(column_names)
+            return
+
         self.tableWidget.setRowCount(len(data))
         self.tableWidget.setColumnCount(len(data[0]))
 

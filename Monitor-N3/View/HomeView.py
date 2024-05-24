@@ -84,7 +84,7 @@ class HomeView(QWidget):
                 QMessageBox.critical(self, "Error", "Error al guardar los datos.")
             except IntegrityError as e:
                 QMessageBox.critical(self, "Error",
-                                         "No se puede agregar el registro, no existe nivel de embalse para la fecha ingresada.")
+                                         "No se puede agregar el registro.")
 
     def actualizar_tabla(self):
         self.tabla_embalse_precipitacion.update_table()

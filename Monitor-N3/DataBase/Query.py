@@ -4,8 +4,9 @@ class Query:
 
     @staticmethod
     def get_embalse():
-        query = "SELECT fecha, hora, nivel_embalse FROM embalse;"
-        results = DatabaseManager.fetch_data(query)
+        database_manager = DatabaseManager()
+        query = "SELECT fecha, nivel_embalse FROM embalse;"
+        results = database_manager.fetch_data(query)
         return results
 
     @staticmethod
