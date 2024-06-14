@@ -1,4 +1,5 @@
 from DataBase.Manager import DatabaseManager
+import pandas as pd
 
 class Query:
 
@@ -7,7 +8,11 @@ class Query:
         database_manager = DatabaseManager()
         query = "SELECT fecha, nivel_embalse FROM embalse;"
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha','nivel_embalse'])
+            return df
+        return pd.DataFrame()
+
 
     @staticmethod
     def get_precipiaciones():
@@ -62,7 +67,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_freatico FROM embalse "
                  "INNER JOIN l3_f1 using(fecha) ORDER BY fecha DESC;")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_freatico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_embalse_aforadores():

@@ -14,7 +14,7 @@ class ShowGraph(QDialog):
 
         # Crear el gráfico interactivo con Plotly
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['fecha'], y=df['nivel_embalse'], mode='lines+markers'))
+        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_freatico'], mode='markers'))
         fig.update_layout(title=title, xaxis_title=xlabel, yaxis_title=ylabel)
 
         # Convertir el gráfico a HTML

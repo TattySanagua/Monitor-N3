@@ -1,7 +1,6 @@
-import math
-
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QMainWindow,QTableWidget, QTableWidgetItem
 from DataBase.Query import Query
+import pandas as pd
 
 class TablaFreatimetroView(QMainWindow):
     def __init__(self):
@@ -19,7 +18,7 @@ class TablaFreatimetroView(QMainWindow):
         self.tableWidget.clear()
         data = Query.get_l3_f1()
 
-        if not data:  # Verificar si data está vacío
+        if data.empty:  # Verificar si data está vacío
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             column_names = ["Fecha", "Nivel de embalse [msnm]", "Nivel freático [msnm]"]
@@ -28,15 +27,15 @@ class TablaFreatimetroView(QMainWindow):
             return
 
         self.tableWidget.setRowCount(len(data))
-        self.tableWidget.setColumnCount(len(data[0]))
+        self.tableWidget.setColumnCount(len(data.columns))
 
         column_names = ["Fecha", "Nivel de embalse [msnm]", "Nivel freático [msnm]"]
 
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
-        for i, row in enumerate(data):
+        for i, row in data.iterrows():
             for j, item in enumerate(row):
-                if item is None or (isinstance(item, float) and math.isnan(item)):
+                if pd.isnull(item):
                     item = '-'
                 elif j == 0:
                     formatted_date = item.strftime("%d/%m/%Y")

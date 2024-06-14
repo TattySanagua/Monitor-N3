@@ -7,7 +7,7 @@ class GraphEmbalseView(GraphView):
     def __init__(self):
         super(GraphEmbalseView, self).__init__()
         self.setWindowTitle("Gráficos Embalse")
-        self.setGeometry(100, 100, 400, 400)
+        self.setGeometry(100, 100, 800, 600)
         self.init_ui()
 
     def init_ui(self):
@@ -25,19 +25,16 @@ class GraphEmbalseView(GraphView):
         self.layout.addLayout(self.hlyt_buttons)
 
     def show_graph_ne_tiempo(self):
-        data = Query.get_embalse()
-        if not data:
+        df = Query.get_embalse()
+        if df.empty:
             QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
             return
 
-        x = [row[0].strftime('%Y-%m-%d') for row in data]
-        y = [row[1] for row in data]
-        self.show_graph(x, y, "Nivel de embalse - Tiempo", "Fecha", "N.E [msnm]")
+        self.show_graph(df, "Nivel de embalse - Tiempo", "Fecha", "N.E [msnm]")
 
     def show_graph_ne_lluvia(self):
-        # Implementar lógica para otro tipo de gráfico
-        pass
+        pass  # Implementa la lógica para otro tipo de gráfico aquí si es necesario
 
-    def show_graph(self, x, y, title, xlabel, ylabel):
-        self.graph_window = ShowGraph(x, y, title, xlabel, ylabel)
-        self.graph_window.showFullScreen()
+    def show_graph(self, df, title, xlabel, ylabel):
+        self.graph_window = ShowGraph(df, title, xlabel, ylabel)
+        self.graph_window.showFullScreen()  # O muestra de acuerdo a tus preferencias de visualización
