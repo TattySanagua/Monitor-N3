@@ -12,6 +12,7 @@ from View.TableFreatimeterView import TablaFreatimetroView
 from View.TableAforadorView import TablaAforadoresView
 from View.GraphEmbalseView import GraphEmbalseView
 from View.GraphFreatimeterView import GraphFreatimeterView
+from View.GraphPiezometersView import GraphPiezometrosView
 import sys
 
 class Monitor(QMainWindow):
@@ -43,6 +44,7 @@ class Monitor(QMainWindow):
 
         self.graph_embalse_view = GraphEmbalseView()
         self.graph_freatimeter_view = GraphFreatimeterView()
+        self.graph_piezometros_view = GraphPiezometrosView()
 
     def create_menu(self):
         #Menu bar
@@ -129,7 +131,7 @@ class Monitor(QMainWindow):
         self.tabla_embalse_7piezometros.show()
 
     def show_grafico_piezometro_view(self):
-        pass
+        self.graph_piezometros_view.show()
 
     def show_freatimetro_view(self):
         self.central_widget = FreatimeterView(self.tabla_freatimetro_view)

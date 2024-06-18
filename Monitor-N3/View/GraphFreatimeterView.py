@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QMessageBox
 from DataBase.Query import Query
 from View.GraphView import GraphView
-from View.ShowGraphEmbalse import ShowGraph
+import pandas as pd
+import plotly.graph_objects as go
 
 class GraphFreatimeterView(GraphView):
     def __init__(self):
@@ -13,7 +14,7 @@ class GraphFreatimeterView(GraphView):
     def init_ui(self):
         super().init_ui()
         self.hlyt_buttons = QHBoxLayout()
-        self.btn_ne_tiempo = QPushButton("N.E - Nivel Freático")
+        self.btn_ne_tiempo = QPushButton("x=N.E - y=Nivel Freático")
         #self.btn_ne_lluvia = QPushButton("N.E - Precipitación")
 
         self.hlyt_buttons.addWidget(self.btn_ne_tiempo)
@@ -25,16 +26,20 @@ class GraphFreatimeterView(GraphView):
         self.layout.addLayout(self.hlyt_buttons)
 
     def show_graph_ne_tiempo(self):
-        df = Query.get_l3_f1()
-        if df.empty:
+        data = Query.get_l3_f1()
+
+        if data.empty:
             QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
             return
 
-        self.show_graph(df, "Nivel de embalse - Nivel Freático", "Nivel de Embalse", "Nivel Freático")
+        df = pd.DataFrame(data)
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_freatico'], mode='markers', name='markers'))
+
+        fig.update_layout(title='L3-F1', xaxis_title='Nivel de Embalse', yaxis_title='Nivel Freático')
+
+        fig.show()
 
     # def show_graph_ne_lluvia(self):
     #     pass
-
-    def show_graph(self, df, title, xlabel, ylabel):
-        self.graph_window = ShowGraph(df, title, xlabel, ylabel)
-        self.graph_window.showFullScreen()
