@@ -14,18 +14,15 @@ class GraphFreatimeterView(GraphView):
     def init_ui(self):
         super().init_ui()
         self.hlyt_buttons = QHBoxLayout()
-        self.btn_ne_tiempo = QPushButton("x=N.E - y=Nivel Freático")
-        #self.btn_ne_lluvia = QPushButton("N.E - Precipitación")
+        self.btn_ne_nf = QPushButton("x=N.E - y=Nivel Freático")
 
-        self.hlyt_buttons.addWidget(self.btn_ne_tiempo)
-        #self.hlyt_buttons.addWidget(self.btn_ne_lluvia)
+        self.hlyt_buttons.addWidget(self.btn_ne_nf)
 
-        self.btn_ne_tiempo.clicked.connect(self.show_graph_ne_tiempo)
-        #self.btn_ne_lluvia.clicked.connect(self.show_graph_ne_lluvia)
+        self.btn_ne_nf.clicked.connect(self.show_graph_ne_nf)
 
         self.layout.addLayout(self.hlyt_buttons)
 
-    def show_graph_ne_tiempo(self):
+    def show_graph_ne_nf(self):
         data = Query.get_l3_f1()
 
         if data.empty:
@@ -40,6 +37,3 @@ class GraphFreatimeterView(GraphView):
         fig.update_layout(title='L3-F1', xaxis_title='Nivel de Embalse', yaxis_title='Nivel Freático')
 
         fig.show()
-
-    # def show_graph_ne_lluvia(self):
-    #     pass

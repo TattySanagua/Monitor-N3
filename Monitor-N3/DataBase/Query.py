@@ -50,7 +50,10 @@ class Query:
                  "LEFT JOIN l3_pc6 ON embalse.fecha = l3_pc6.fecha "
                  "LEFT JOIN l3_pc7 ON embalse.fecha = l3_pc7.fecha ORDER BY embalse.fecha DESC;")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico_pc1', 'nivel_piezometrico_pc2', 'nivel_piezometrico_pc3', 'nivel_piezometrico_pc4', 'nivel_piezometrico_pc5', 'nivel_piezometrico_pc6', 'nivel_piezometrico_pc7'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_l3_pc1():
@@ -107,6 +110,25 @@ class Query:
                  "INNER JOIN l3_pc7 using(fecha);")
         results = database_manager.fetch_data(query)
         return results
+
+    @staticmethod
+    def get_embalse_pc1_5_6():
+        database_manager = DatabaseManager()
+        query = ("SELECT embalse.fecha, "
+                 "embalse.nivel_embalse, "
+                 "l3_pc1.nivel_piezometrico, "
+                 "l3_pc5.nivel_piezometrico, "
+                 "l3_pc6.nivel_piezometrico "
+                 "FROM embalse "
+                 "LEFT JOIN l3_pc1 ON embalse.fecha = l3_pc1.fecha "
+                 "LEFT JOIN l3_pc5 ON embalse.fecha = l3_pc5.fecha "
+                 "LEFT JOIN l3_pc6 ON embalse.fecha = l3_pc6.fecha;")
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results,
+                              columns=['fecha', 'nivel_embalse', 'nivel_piezometrico_pc1', 'nivel_piezometrico_pc5', 'nivel_piezometrico_pc6'])
+            return df
+        return pd.DataFrame()
     @staticmethod
     def get_l3_f1():
         database_manager = DatabaseManager()
@@ -118,6 +140,17 @@ class Query:
             return df
         return pd.DataFrame()
 
+    @staticmethod
+    def get_embalse_f1_pc2_pc3_pc4():
+        database_manager = DatabaseManager()
+        query = ("SELECT embalse.fecha, embalse.nivel_embalse, l3_f1.nivel_freatico, l3_pc2.nivel_piezometrico, l3_pc3.nivel_piezometrico, l3_pc4.nivel_piezometrico FROM embalse LEFT JOIN l3_f1 ON embalse.fecha = l3_f1.fecha LEFT JOIN l3_pc2 ON embalse.fecha = l3_pc2.fecha LEFT JOIN l3_pc3 ON embalse.fecha = l3_pc3.fecha LEFT JOIN l3_pc4 ON embalse.fecha = l3_pc4.fecha;")
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results,
+                              columns=['fecha', 'nivel_embalse', 'nivel_freatico', 'nivel_piezometrico_pc2', 'nivel_piezometrico_pc3',
+                                       'nivel_piezometrico_pc4'])
+            return df
+        return pd.DataFrame()
     @staticmethod
     def get_embalse_aforadores():
         database_manager = DatabaseManager()
@@ -134,6 +167,39 @@ class Query:
                  "ORDER BY fecha DESC;")
         results = database_manager.fetch_data(query)
         return results
+
+    @staticmethod
+    def get_afo3_tot():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, caudal FROM embalse "
+                 "INNER JOIN afo3_tot using(fecha);")
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
+            return df
+        return pd.DataFrame()
+
+    @staticmethod
+    def get_afo3_ei():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, caudal FROM embalse "
+                 "INNER JOIN afo3_ei using(fecha);")
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
+            return df
+        return pd.DataFrame()
+
+    @staticmethod
+    def get_afo3_pp():
+        database_manager = DatabaseManager()
+        query = ("SELECT fecha, nivel_embalse, caudal FROM embalse "
+                 "INNER JOIN afo3_pp using(fecha);")
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def insert_data_embalse(fecha, hora, nivel_ambalse):

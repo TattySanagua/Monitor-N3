@@ -18,7 +18,7 @@ class TablaFreatimetroView(QMainWindow):
         self.tableWidget.clear()
         data = Query.get_l3_f1()
 
-        if data.empty:  # Verificar si data está vacío
+        if data.empty:
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             column_names = ["Fecha", "Nivel de embalse [msnm]", "Nivel freático [msnm]"]
