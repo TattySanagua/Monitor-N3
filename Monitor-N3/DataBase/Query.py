@@ -157,13 +157,11 @@ class Query:
         query = ("SELECT embalse.fecha, embalse.nivel_embalse, "
                  "afo3_ei.caudal, "
                  "afo3_pp.caudal, "
-                 "afo3_tot.caudal, "
-                 "parshall.caudal "
+                 "afo3_tot.caudal "
                  "FROM embalse "
                  "LEFT JOIN afo3_ei ON embalse.fecha = afo3_ei.fecha "
                  "LEFT JOIN afo3_pp ON embalse.fecha = afo3_pp.fecha "
                  "LEFT JOIN afo3_tot ON embalse.fecha = afo3_tot.fecha "
-                 "LEFT JOIN parshall ON embalse.fecha = parshall.fecha "
                  "ORDER BY fecha DESC;")
         results = database_manager.fetch_data(query)
         return results
@@ -289,12 +287,5 @@ class Query:
     def insert_data_afo3_tot(fecha, caudal):
         database_manager = DatabaseManager()
         query = (f"INSERT INTO afo3_tot (fecha, caudal) "
-                 f"VALUES ('{fecha}', {caudal});")
-        database_manager.execute_query(query)
-
-    @staticmethod
-    def insert_data_parshall(fecha, caudal):
-        database_manager = DatabaseManager()
-        query = (f"INSERT INTO parshall (fecha, caudal) "
                  f"VALUES ('{fecha}', {caudal});")
         database_manager.execute_query(query)
