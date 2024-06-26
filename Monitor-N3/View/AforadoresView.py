@@ -18,7 +18,7 @@ class AforadoresView(QWidget):
 
     def setup_ui(self):
 
-        lbl_titulo_ppal = QLabel("Presa Lateral N° 3", self)
+        lbl_titulo_ppal = QLabel("AFORADORES", self)
         lbl_fecha = QLabel("Fecha", self)
         lbl_fecha.setFixedWidth(60)
 
