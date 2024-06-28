@@ -6,9 +6,9 @@ from DataBase.Query import Query
 from Signals.DataUpdater import DataUpdater
 
 
-class HomeView(QWidget):
+class EmbalseView(QWidget):
     def __init__(self, tabla_embalse_precipitacion):
-        super(HomeView,self).__init__()
+        super(EmbalseView,self).__init__()
         self.setup_ui()
         self.tabla_embalse_precipitacion = tabla_embalse_precipitacion
         self.data_updater = DataUpdater()

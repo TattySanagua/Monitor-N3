@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QApplication, QAction, QMainWindow
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
 from View.HomeView import HomeView
+from View.EmbalseView import EmbalseView
 from View.PrecipitacionView import PrecipitacionView
 from View.PiezometersView import PiezometersView
 from View.FreatimeterView import FreatimeterView
@@ -52,27 +53,35 @@ class Monitor(QMainWindow):
         #Menu bar
         menu_bar = self.menuBar()
         menu_inicio = menu_bar.addMenu("Inicio")
+        menu_embalse = menu_bar.addMenu("Embalse")
         menu_piezometros = menu_bar.addMenu("Piezómetros")
         menu_freatimetro = menu_bar.addMenu("Freatímetro")
         menu_aforadores = menu_bar.addMenu("Aforadores")
+        menu_instrumentos = menu_bar.addMenu("Instrumentos")
 
         #Acciones
-        action_inicio = QAction("Embalse", self)
+        action_inicio = QAction("Inicio", self)
         action_inicio.triggered.connect(self.show_home_view)
         menu_inicio.addAction(action_inicio)
 
-        action_inicio = QAction("Precipitación", self)
-        action_inicio.triggered.connect(self.show_precipitacion_view)
-        menu_inicio.addAction(action_inicio)
+        #
+        action_embalse = QAction("Embalse", self)
+        action_embalse.triggered.connect(self.show_embalse_view)
+        menu_embalse.addAction(action_embalse)
 
-        action_inicio = QAction("Tabla", self)
-        action_inicio.triggered.connect(self.show_tabla_embalse_view)
-        menu_inicio.addAction(action_inicio)
+        action_embalse = QAction("Precipitación", self)
+        action_embalse.triggered.connect(self.show_precipitacion_view)
+        menu_embalse.addAction(action_embalse)
 
-        action_inicio = QAction("Gráficos", self)
-        action_inicio.triggered.connect(self.show_grafico_embalse_view)
-        menu_inicio.addAction(action_inicio)
+        action_embalse = QAction("Tabla", self)
+        action_embalse.triggered.connect(self.show_tabla_embalse_view)
+        menu_embalse.addAction(action_embalse)
 
+        action_embalse = QAction("Gráficos", self)
+        action_embalse.triggered.connect(self.show_grafico_embalse_view)
+        menu_embalse.addAction(action_embalse)
+
+        #
         action_piezometros = QAction("Medición", self)
         action_piezometros.triggered.connect(self.show_piezometros_view)
         menu_piezometros.addAction(action_piezometros)
@@ -85,6 +94,7 @@ class Monitor(QMainWindow):
         action_piezometros.triggered.connect(self.show_grafico_piezometro_view)
         menu_piezometros.addAction(action_piezometros)
 
+        #
         action_freatimetro = QAction("Medición", self)
         action_freatimetro.triggered.connect(self.show_freatimetro_view)
         menu_freatimetro.addAction(action_freatimetro)
@@ -97,6 +107,7 @@ class Monitor(QMainWindow):
         action_freatimetro.triggered.connect(self.show_grafico_freatimetro_view)
         menu_freatimetro.addAction(action_freatimetro)
 
+        #
         action_aforadores = QAction("Medición", self)
         action_aforadores.triggered.connect(self.show_aforadores_view)
         menu_aforadores.addAction(action_aforadores)
@@ -109,8 +120,17 @@ class Monitor(QMainWindow):
         action_aforadores.triggered.connect(self.show_grafico_aforadores_view)
         menu_aforadores.addAction(action_aforadores)
 
+        #
+        action_instrumentos = QAction("Agregar nuevo", self)
+        action_instrumentos.triggered.connect(self.show_nuevo_instrumento_view)
+        menu_instrumentos.addAction(action_instrumentos)
+
     def show_home_view(self):
         self.central_widget = HomeView(self.tabla_embalse_precipitacion)
+        self.setCentralWidget(self.central_widget)
+
+    def show_embalse_view(self):
+        self.central_widget = EmbalseView(self.tabla_embalse_precipitacion)
         self.setCentralWidget(self.central_widget)
 
     def show_precipitacion_view(self):
@@ -162,6 +182,9 @@ class Monitor(QMainWindow):
 
     def show_grafico_aforadores_view(self):
         self.graph_aforador_view.show()
+
+    def show_nuevo_instrumento_view(self):
+        pass
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

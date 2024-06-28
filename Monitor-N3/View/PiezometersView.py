@@ -1,4 +1,5 @@
 from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtGui import QColor, QFontDatabase
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QMessageBox, QDateEdit, QComboBox
 from mysql.connector import IntegrityError
@@ -25,7 +26,33 @@ class PiezometersView(QWidget):
         }
 
     def setup_ui(self):
-
+        self.setStyleSheet("""
+                    QWidget {
+                        background-color: #F0F0F0;
+                    }
+                    QLabel {
+                        color: #333333;
+                    }
+                    QLineEdit, QDateEdit, QComboBox {
+                        border: 1px solid #CCCCCC;
+                        padding: 5px;
+                        color: #333333;
+                        background-color: #FFFFFF;
+                    }
+                    QPushButton {
+                        background-color: #4A90E2;
+                        color: #FFFFFF;
+                        border: none;
+                        padding: 10px;
+                    }
+                    QPushButton:hover {
+                        background-color: #0056b3;
+                    }
+                    QMessageBox {
+                        background-color: #F0F0F0;
+                        color: #333333;
+                    }
+                """)
         lbl_titulo_ppal = QLabel("PIEZÓMETROS", self)
         lbl_fecha = QLabel("Fecha", self)
         lbl_fecha.setFixedWidth(60)
