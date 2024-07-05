@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, QDate, QTime
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QDateEdit, \
-    QTimeEdit, QMessageBox
+    QTimeEdit, QMessageBox, QGridLayout
 from mysql.connector import IntegrityError
 from DataBase.Query import Query
 from Signals.DataUpdater import DataUpdater
@@ -16,52 +16,57 @@ class EmbalseView(QWidget):
 
     def setup_ui(self):
 
-        lbl_titulo_ppal = QLabel("Presa Lateral N° 3", self)
+        lbl_titulo_ppal = QLabel("EMBALSE", self)
+        lbl_titulo_ppal.setObjectName("title2")
         lbl_fecha = QLabel("Fecha", self)
-        lbl_fecha.setFixedWidth(110)
         lbl_hora = QLabel("Hora", self)
-        lbl_hora.setFixedWidth(110)
         lbl_nivel_embalse = QLabel("Nivel de embalse", self)
-        lbl_nivel_embalse.setFixedWidth(110)
         lbl_m = QLabel("msnm", self)
+        lbl_v1 = QLabel("", self)
 
         self.date_edit = QDateEdit(self)
+        self.date_edit.setFixedWidth(150)
         self.date_edit.setCalendarPopup(True)
-        self.date_edit.setFixedWidth(160)
         self.date_edit.setDate(QDate.currentDate())
 
         self.time_edit = QTimeEdit(self)
+        self.time_edit.setFixedWidth(150)
         self.time_edit.setDisplayFormat("hh:mm")
-        self.time_edit.setFixedWidth(160)
         self.time_edit.setTime(QTime.currentTime())
 
         self.lned_nivel_embalse = QLineEdit(self)
-        self.lned_nivel_embalse.setFixedWidth(160)
+        self.lned_nivel_embalse.setFixedWidth(150)
 
         self.btn_guardar = QPushButton("Guardar", self)
-        self.btn_guardar.setFixedWidth(130)
+        self.btn_guardar.setObjectName("btn")
 
-        hlyt_fecha = QHBoxLayout()
-        hlyt_fecha.addWidget(lbl_fecha, alignment=Qt.AlignCenter)
-        hlyt_fecha.addWidget(self.date_edit, alignment=Qt.AlignCenter)
+        grid_layout = QGridLayout(self)
 
-        hlyt_hora = QHBoxLayout()
-        hlyt_hora.addWidget(lbl_hora, alignment=Qt.AlignCenter)
-        hlyt_hora.addWidget(self.time_edit, alignment=Qt.AlignCenter)
+        grid_layout.setRowStretch(0, 1)
+        grid_layout.setRowStretch(1, 1)
+        grid_layout.setRowStretch(2, 1)
+        grid_layout.setRowStretch(3, 1)
+        grid_layout.setRowStretch(5, 1)
+        grid_layout.setRowStretch(7, 1)
+        grid_layout.setRowStretch(9, 1)
+        grid_layout.setRowStretch(11, 1)
+        grid_layout.setRowStretch(13, 1)
+        grid_layout.setRowStretch(14, 1)
+        grid_layout.setRowStretch(15, 1)
+        grid_layout.setRowStretch(16, 1)
 
-        hlyt_embalse = QHBoxLayout()
-        hlyt_embalse.addWidget(lbl_nivel_embalse, alignment=Qt.AlignCenter)
-        hlyt_embalse.addWidget(self.lned_nivel_embalse, alignment=Qt.AlignCenter)
-        hlyt_embalse.addWidget(lbl_m, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(lbl_titulo_ppal, 4, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(lbl_v1, 6, 0)
+        grid_layout.addWidget(lbl_fecha, 6, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.date_edit, 6, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(lbl_hora, 8, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.time_edit, 8, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(lbl_nivel_embalse, 10, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lned_nivel_embalse, 10, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(lbl_m, 10, 3, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.btn_guardar, 12, 1, 1, 2, alignment=Qt.AlignCenter)
 
-        vlyt_principal = QVBoxLayout(self)
-        vlyt_principal.setAlignment(Qt.AlignVCenter)
-
-        vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)
-        vlyt_principal.addLayout(hlyt_fecha)
-        vlyt_principal.addLayout(hlyt_hora)
-        vlyt_principal.addLayout(hlyt_embalse)
-        vlyt_principal.addWidget(self.btn_guardar, alignment=Qt.AlignCenter)
+        self.setLayout(grid_layout)
 
         self.btn_guardar.clicked.connect(self.guardar)
 

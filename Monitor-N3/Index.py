@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QAction, QMainWindow
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFontDatabase
 from PyQt5.QtCore import pyqtSignal
 from View.HomeView import HomeView
 from View.EmbalseView import EmbalseView
@@ -16,6 +16,7 @@ from View.GraphFreatimeterView import GraphFreatimeterView
 from View.GraphPiezometersView import GraphPiezometrosView
 from View.GraphAforadorView import GraphAforadorView
 import sys
+import os
 
 class Monitor(QMainWindow):
 
@@ -24,7 +25,7 @@ class Monitor(QMainWindow):
         super(Monitor, self).__init__()
         self.setWindowTitle("Monitor N3")
         # screen_size = QDesktopWidget().screenGeometry()
-        self.setGeometry(50, 50, 450, 650)
+        self.setGeometry(300, 130, 530, 650)
         self.setWindowIcon(QIcon("LogoOrsep.jpg"))
         self.tabla_embalse_precipitacion = TablaEmbalseView()
         self.home_view = HomeView(self.tabla_embalse_precipitacion)
@@ -188,6 +189,22 @@ class Monitor(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+
+    fuente_path = os.path.abspath(os.path.join("..", "Fuentes", "OpenSans-Regular.ttf"))
+    stylesheet_path = os.path.abspath(os.path.join("..", "Style", "style.qss"))
+
+    # Fuente
+    font_id = QFontDatabase.addApplicationFont(fuente_path)
+    if font_id == -1:
+        print("Error al cargar la fuente Open Sans")
+    else:
+        family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        print(f"Fuente '{family}' cargada exitosamente.")
+
+    # Stylesheet
+    with open(stylesheet_path, "r") as style_file:
+        app.setStyleSheet(style_file.read())
+
     window = Monitor()
     window.show()
     sys.exit(app.exec_())

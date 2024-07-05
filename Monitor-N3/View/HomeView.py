@@ -8,16 +8,11 @@ class HomeView(QWidget):
         self.setup_ui()
 
     def setup_ui(self):
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #F0F0F0;
-            }
-            QLabel {
-                color: #333333;
-            }
-        """)
         lbl_titulo_ppal = QLabel("PRESA LATERAL N° 3", self)
+        lbl_titulo_ppal.setObjectName("title1")
+
         lbl_txt = QLabel("Software de cálculo de niveles piezométricos, y caudales \n de los instrumentos instalados en presa lateral nº 3 del Cadillal", self)
+        lbl_txt.setObjectName("title3")
 
         vlyt_principal = QVBoxLayout(self)
         vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)

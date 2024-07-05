@@ -6,12 +6,12 @@ class TablaFreatimetroView(QMainWindow):
     def __init__(self):
         super(TablaFreatimetroView,self).__init__()
         self.setWindowTitle("Tabla de Freatímetro")
-        self.setGeometry(100, 100, 600, 700)
+        self.setGeometry(200, 100, 550, 700)
         self.create_table()
 
     def create_table(self):
         self.tableWidget = QTableWidget(self)
-        self.tableWidget.setGeometry(50,50,400,600)
+        self.tableWidget.setGeometry(50,50,450,600)
         self.update_table()
 
     def update_table(self):

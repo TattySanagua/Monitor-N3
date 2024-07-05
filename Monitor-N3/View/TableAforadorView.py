@@ -6,12 +6,12 @@ class TablaAforadoresView(QMainWindow):
     def __init__(self):
         super(TablaAforadoresView,self).__init__()
         self.setWindowTitle("Tabla de Aforadores")
-        self.setGeometry(100, 100, 1000, 700)
+        self.setGeometry(200, 100, 850, 700)
         self.create_table()
 
     def create_table(self):
         self.tableWidget = QTableWidget(self)
-        self.tableWidget.setGeometry(50, 50, 900, 600)
+        self.tableWidget.setGeometry(50, 50, 750, 600)
         self.update_table()
 
     def update_table(self):

@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox, QDateEdit, QComboBox
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox, QDateEdit, \
+    QComboBox, QGridLayout
 from mysql.connector import IntegrityError
 from DataBase.Query import Query
 from Signals.DataUpdater import DataUpdater
@@ -22,70 +23,69 @@ class FreatimeterView(QWidget):
 
     def setup_ui(self):
 
-        lbl_titulo_ppal = QLabel("FREATÍMETROS", self)
+        lbl_titulo_ppal = QLabel("FREATÍMETRO", self)
+        lbl_titulo_ppal.setObjectName("title2")
         lbl_fecha = QLabel("Fecha", self)
-        lbl_fecha.setFixedWidth(110)
+        lbl_v1 = QLabel("")
 
         self.lbl_freatimetro = QLabel("Freatímetro: ", self)
-        self.lbl_freatimetro.setFixedWidth(60)
 
         self.cmbx_freatimetro = QComboBox(self)
+        self.cmbx_freatimetro.setFixedWidth(150)
         self.cmbx_freatimetro.addItems(["L3-F1"])
         self.cmbx_freatimetro.currentIndexChanged.connect(self.actualizar_freatimetro)
 
-        self.lbl_Nf = QLabel("Nf = ")
-        self.lbl_Nf.setFixedWidth(60)
+        self.lbl_Nf = QLabel("Nivel freático = ")
         self.lbl_resultado = QLabel("")
-        self.lbl_resultado.setFixedWidth(100)
+        self.lbl_resultado.setFixedWidth(150)
         self.lbl_msnm = QLabel("msnm")
-        self.lbl_msnm.setFixedWidth(55)
 
         self.date_edit = QDateEdit(self)
-        self.date_edit.setFixedWidth(160)
+        self.date_edit.setFixedWidth(150)
         self.date_edit.setCalendarPopup(True)
         self.date_edit.setDate(QDate.currentDate())
 
         self.lbl_lectura = QLabel("Lectura: ")
-        self.lbl_lectura.setFixedWidth(60)
         self.lned_lectura_f = QLineEdit(self)
-        self.lned_lectura_f.setFixedWidth(160)
+        self.lned_lectura_f.setFixedWidth(150)
 
         self.btn_calcular_nf = QPushButton("Calcular", self)
-        self.btn_calcular_nf.setFixedWidth(120)
+        self.btn_calcular_nf.setObjectName("btn")
 
         self.btn_guardar_nf = QPushButton("Guardar", self)
-        self.btn_calcular_nf.setFixedWidth(120)
+        self.btn_guardar_nf.setObjectName("btn")
 
-        hlyt_fecha = QHBoxLayout()
-        hlyt_fila_cmbx = QHBoxLayout()
-        hlyt_fila_lectura = QHBoxLayout()
-        hlyt_fila_resultado = QHBoxLayout()
-        hlyt_fila_btns = QHBoxLayout()
+        grid_layout = QGridLayout(self)
 
-        hlyt_fecha.addWidget(lbl_fecha)
-        hlyt_fecha.addWidget(self.date_edit)
+        grid_layout.setRowStretch(0, 1)
+        grid_layout.setRowStretch(1, 1)
+        grid_layout.setRowStretch(2, 1)
+        grid_layout.setRowStretch(3, 1)
+        grid_layout.setRowStretch(5, 1)
+        grid_layout.setRowStretch(7, 1)
+        grid_layout.setRowStretch(9, 1)
+        grid_layout.setRowStretch(11, 1)
+        grid_layout.setRowStretch(13, 1)
+        grid_layout.setRowStretch(15, 1)
+        grid_layout.setRowStretch(16, 1)
+        grid_layout.setRowStretch(17, 1)
+        grid_layout.setRowStretch(18, 1)
 
-        hlyt_fila_cmbx.addWidget(self.lbl_freatimetro)
-        hlyt_fila_cmbx.addWidget(self.cmbx_freatimetro)
+        grid_layout.addWidget(lbl_titulo_ppal, 4, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(lbl_v1, 6, 0)
+        grid_layout.addWidget(lbl_fecha, 6, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.date_edit, 6, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_freatimetro, 8, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.cmbx_freatimetro, 8, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_lectura, 10, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lned_lectura_f, 10, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_Nf, 12, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_resultado, 12, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_msnm, 12, 3, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.btn_calcular_nf, 14, 1, 1, 1, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(self.btn_guardar_nf, 14, 2, 1, 1, alignment=Qt.AlignCenter)
 
-        hlyt_fila_lectura.addWidget(self.lbl_lectura)
-        hlyt_fila_lectura.addWidget(self.lned_lectura_f)
-
-        hlyt_fila_resultado.addWidget(self.lbl_Nf)
-        hlyt_fila_resultado.addWidget(self.lbl_resultado)
-        hlyt_fila_resultado.addWidget(self.lbl_msnm)
-
-        hlyt_fila_btns.addWidget(self.btn_calcular_nf)
-        hlyt_fila_btns.addWidget(self.btn_guardar_nf)
-
-        vlyt_principal = QVBoxLayout(self)
-        vlyt_principal.setAlignment(Qt.AlignVCenter)
-        vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)
-        vlyt_principal.addLayout(hlyt_fecha)
-        vlyt_principal.addLayout(hlyt_fila_cmbx)
-        vlyt_principal.addLayout(hlyt_fila_lectura)
-        vlyt_principal.addLayout(hlyt_fila_resultado)
-        vlyt_principal.addLayout(hlyt_fila_btns)
+        self.setLayout(grid_layout)
 
         self.data_updater = DataUpdater()
 

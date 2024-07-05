@@ -16,7 +16,8 @@ class PrecipitacionView(QWidget):
 
     def setup_ui(self):
 
-        lbl_titulo_ppal = QLabel("Presa Lateral N° 3", self)
+        lbl_titulo_ppal = QLabel("PRECIPITACIONES", self)
+        lbl_titulo_ppal.setObjectName("title2")
         lbl_fecha = QLabel("Fecha", self)
         lbl_fecha.setFixedWidth(110)
         lbl_precipitacion = QLabel("Precipitación", self)
@@ -46,6 +47,7 @@ class PrecipitacionView(QWidget):
         self.lned_diez_dias_previos.setFixedWidth(160)
 
         self.btn_guardar = QPushButton("Guardar", self)
+        self.btn_guardar.setObjectName("btn")
         self.btn_guardar.setFixedWidth(130)
 
         hlyt_fecha = QHBoxLayout()

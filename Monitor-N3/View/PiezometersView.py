@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QColor, QFontDatabase
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
-    QMessageBox, QDateEdit, QComboBox
+    QMessageBox, QDateEdit, QComboBox, QGridLayout
 from mysql.connector import IntegrityError
 from DataBase.Query import Query
 from Signals.DataUpdater import DataUpdater
@@ -26,98 +26,70 @@ class PiezometersView(QWidget):
         }
 
     def setup_ui(self):
-        self.setStyleSheet("""
-                    QWidget {
-                        background-color: #F0F0F0;
-                    }
-                    QLabel {
-                        color: #333333;
-                    }
-                    QLineEdit, QDateEdit, QComboBox {
-                        border: 1px solid #CCCCCC;
-                        padding: 5px;
-                        color: #333333;
-                        background-color: #FFFFFF;
-                    }
-                    QPushButton {
-                        background-color: #4A90E2;
-                        color: #FFFFFF;
-                        border: none;
-                        padding: 10px;
-                    }
-                    QPushButton:hover {
-                        background-color: #0056b3;
-                    }
-                    QMessageBox {
-                        background-color: #F0F0F0;
-                        color: #333333;
-                    }
-                """)
+
         lbl_titulo_ppal = QLabel("PIEZÓMETROS", self)
+        lbl_titulo_ppal.setObjectName("title2")
         lbl_fecha = QLabel("Fecha", self)
-        lbl_fecha.setFixedWidth(60)
+        lbl_v1 = QLabel("")
 
         self.lbl_piezometro = QLabel("Piezómetro: ", self)
-        self.lbl_piezometro.setFixedWidth(80)
 
         self.cmbx_piezometro = QComboBox(self)
+        self.cmbx_piezometro.setFixedWidth(150)
         self.cmbx_piezometro.addItems(["L3-PC1", "L3-PC2", "L3-PC3", "L3-PC4", "L3-PC5", "L3-PC6", "L3-PC7"])
         self.cmbx_piezometro.currentIndexChanged.connect(self.actualizar_piezometro)
 
-        self.lbl_Np = QLabel("Np = ")
-        self.lbl_Np.setFixedWidth(60)
+        self.lbl_Np = QLabel("Nivel piezométrico = ")
         self.lbl_resultado = QLabel("")
-        self.lbl_resultado.setFixedWidth(100)
+        self.lbl_resultado.setFixedWidth(150)
         self.lbl_msnm = QLabel("msnm")
-        self.lbl_msnm.setFixedWidth(55)
 
         self.date_edit = QDateEdit(self)
-        self.date_edit.setFixedWidth(160)
+        self.date_edit.setFixedWidth(150)
         self.date_edit.setCalendarPopup(True)
         self.date_edit.setDate(QDate.currentDate())
 
         self.lbl_lectura = QLabel("Lectura: ")
-        self.lbl_lectura.setFixedWidth(60)
         self.lned_lectura = QLineEdit(self)
-        self.lned_lectura.setFixedWidth(160)
-
+        self.lned_lectura.setFixedWidth(150)
 
         self.btn_calcular_nps = QPushButton("Calcular", self)
-        self.btn_calcular_nps.setFixedWidth(120)
+        self.btn_calcular_nps.setObjectName("btn")
 
         self.btn_guardar_nps = QPushButton("Guardar", self)
-        self.btn_guardar_nps.setFixedWidth(120)
+        self.btn_guardar_nps.setObjectName("btn")
 
-        hlyt_fecha = QHBoxLayout()
-        hlyt_fila_cmbx = QHBoxLayout()
-        hlyt_fila_lectura = QHBoxLayout()
-        hlyt_fila_resultado = QHBoxLayout()
-        hlyt_fila_btns = QHBoxLayout()
+        grid_layout = QGridLayout(self)
 
-        hlyt_fecha.addWidget(lbl_fecha)
-        hlyt_fecha.addWidget(self.date_edit)
+        grid_layout.setRowStretch(0, 1)
+        grid_layout.setRowStretch(1, 1)
+        grid_layout.setRowStretch(2, 1)
+        grid_layout.setRowStretch(3, 1)
+        grid_layout.setRowStretch(5, 1)
+        grid_layout.setRowStretch(7, 1)
+        grid_layout.setRowStretch(9, 1)
+        grid_layout.setRowStretch(11, 1)
+        grid_layout.setRowStretch(13, 1)
+        grid_layout.setRowStretch(15, 1)
+        grid_layout.setRowStretch(16, 1)
+        grid_layout.setRowStretch(17, 1)
+        grid_layout.setRowStretch(18, 1)
 
-        hlyt_fila_cmbx.addWidget(self.lbl_piezometro)
-        hlyt_fila_cmbx.addWidget(self.cmbx_piezometro)
+        grid_layout.addWidget(lbl_titulo_ppal, 4, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(lbl_v1, 6, 0)
+        grid_layout.addWidget(lbl_fecha, 6, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.date_edit, 6, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_piezometro, 8, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.cmbx_piezometro, 8, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_lectura, 10, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lned_lectura, 10, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_Np, 12, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_resultado, 12, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lbl_msnm, 12, 3, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.btn_calcular_nps, 14, 1, 1, 1, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(self.btn_guardar_nps, 14, 2, 1, 1, alignment=Qt.AlignCenter)
 
-        hlyt_fila_lectura.addWidget(self.lbl_lectura)
-        hlyt_fila_lectura.addWidget(self.lned_lectura)
-
-        hlyt_fila_resultado.addWidget(self.lbl_Np)
-        hlyt_fila_resultado.addWidget(self.lbl_resultado)
-        hlyt_fila_resultado.addWidget(self.lbl_msnm)
-
-        hlyt_fila_btns.addWidget(self.btn_calcular_nps)
-        hlyt_fila_btns.addWidget(self.btn_guardar_nps)
-
-        vlyt_principal = QVBoxLayout(self)
-        vlyt_principal.setAlignment(Qt.AlignVCenter)
-        vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)
-        vlyt_principal.addLayout(hlyt_fecha)
-        vlyt_principal.addLayout(hlyt_fila_cmbx)
-        vlyt_principal.addLayout(hlyt_fila_lectura)
-        vlyt_principal.addLayout(hlyt_fila_resultado)
-        vlyt_principal.addLayout(hlyt_fila_btns)
+        self.setLayout(grid_layout)
 
         self.btn_calcular_nps.clicked.connect(self.calcular_nps)
         self.btn_guardar_nps.clicked.connect(self.guardar_nps)

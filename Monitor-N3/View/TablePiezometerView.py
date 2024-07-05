@@ -8,12 +8,12 @@ class TablaPiezometrosView(QMainWindow):
     def __init__(self):
         super(TablaPiezometrosView,self).__init__()
         self.setWindowTitle("Tabla de Piezómetros")
-        self.setGeometry(100, 100, 1000, 700)
+        self.setGeometry(150, 100, 1200, 700)
         self.create_table()
 
     def create_table(self):
         self.tableWidget = QTableWidget(self)
-        self.tableWidget.setGeometry(50, 50, 900, 600)
+        self.tableWidget.setGeometry(50, 50, 1100, 600)
         self.update_table()
 
     def update_table(self):
