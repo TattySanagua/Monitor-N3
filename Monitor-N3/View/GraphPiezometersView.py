@@ -1,59 +1,65 @@
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QMessageBox
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QMessageBox, QComboBox, QGridLayout, QWidget, QLabel
 from DataBase.Query import Query
 from View.GraphView import GraphView
 import pandas as pd
 import plotly.graph_objects as go
 
-class GraphPiezometrosView(GraphView):
+class GraphPiezometrosView(QWidget):
     def __init__(self):
         super(GraphPiezometrosView, self).__init__()
         self.setWindowTitle("Gráficos Piezómetros")
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(300, 130, 500, 500)
         self.init_ui()
 
     def init_ui(self):
-        super().init_ui()
-        self.hlyt_buttons = QHBoxLayout()
 
-        self.btn_pc1 = QPushButton("L3-PC1 (N.E - NP)") #Dispersión
-        self.btn_pc2 = QPushButton("L3-PC2 (N.E - NP)") #Dispersión
-        self.btn_pc3 = QPushButton("L3-PC3 (N.E - NP)") #Dispersión
-        self.btn_pc4 = QPushButton("L3-PC4 (N.E - NP)") #Dispersión
-        self.btn_pc5 = QPushButton("L3-PC5 (N.E - NP)") #Dispersión
-        self.btn_pc6 = QPushButton("L3-PC6 (N.E - NP)") #Dispersión
-        self.btn_pc7 = QPushButton("L3-PC7 (N.E - NP)") #Lineal
-        self.btn_pc1_5_6_fecha_np = QPushButton("PC1-5-6 (Fecha - NP)") #Lineal
-        self.btn_pc1_5_6_ne_np = QPushButton("PC1-5-6 (N.E - NP)")
-        self.btn_f1_pc2_3_4_fecha_np = QPushButton("F1-PC2-3-4 (Fecha - NP)")
-        self.btn_f1_pc2_3_4_ne_np = QPushButton("F1-PC2-3-4 (N.E - NP)")
+        lbl_select = QLabel("Seleccionar tipo de gráfico", self)
+        lbl_v1 = QLabel("")
+        lbl_v2 = QLabel("")
+        self.cmb_grafic = QComboBox(self)
 
+        self.cmb_grafic.addItems([
+            "L3-PC1 (Nivel embalse - Nivel piezométrico)",
+            "L3-PC2 (Nivel embalse - Nivel piezométrico)",
+            "L3-PC3 (Nivel embalse - Nivel piezométrico)",
+            "L3-PC4 (Nivel embalse - Nivel piezométrico)",
+            "L3-PC5 (Nivel embalse - Nivel piezométrico)",
+            "L3-PC6 (Nivel embalse - Nivel piezométrico)",
+            "L3-PC7 (Nivel embalse - Nivel piezométrico)",
+            "PC1-5-6 (Fecha - Nivel piezométrico)",
+            "PC1-5-6 (Nivel embalse - Nivel piezométrico)",
+            "F1-PC2-3-4 (Fecha - Nivel piezométrico)",
+            "F1-PC2-3-4 (Nivel embalse - Nivel piezométrico)"
+        ])
 
-        self.hlyt_buttons.addWidget(self.btn_pc1)
-        self.hlyt_buttons.addWidget(self.btn_pc2)
-        self.hlyt_buttons.addWidget(self.btn_pc3)
-        self.hlyt_buttons.addWidget(self.btn_pc4)
-        self.hlyt_buttons.addWidget(self.btn_pc5)
-        self.hlyt_buttons.addWidget(self.btn_pc6)
-        self.hlyt_buttons.addWidget(self.btn_pc7)
-        self.hlyt_buttons.addWidget(self.btn_pc1_5_6_fecha_np)
-        self.hlyt_buttons.addWidget(self.btn_pc1_5_6_ne_np)
-        self.hlyt_buttons.addWidget(self.btn_f1_pc2_3_4_fecha_np)
-        self.hlyt_buttons.addWidget(self.btn_f1_pc2_3_4_ne_np)
+        self.btn_generate = QPushButton("Graficar")
 
-        self.btn_pc1.clicked.connect(self.show_graph_pc1)
-        self.btn_pc2.clicked.connect(self.show_graph_pc2)
-        self.btn_pc3.clicked.connect(self.show_graph_pc3)
-        self.btn_pc4.clicked.connect(self.show_graph_pc4)
-        self.btn_pc5.clicked.connect(self.show_graph_pc5)
-        self.btn_pc6.clicked.connect(self.show_graph_pc6)
-        self.btn_pc7.clicked.connect(self.show_graph_pc7)
-        self.btn_pc1_5_6_fecha_np.clicked.connect(self.show_graph_pc1_5_6_fecha_np)
-        self.btn_pc1_5_6_ne_np.clicked.connect(self.show_graph_pc1_5_6_ne_np)
-        self.btn_f1_pc2_3_4_fecha_np.clicked.connect(self.show_graph_f1_pc2_3_4_fecha_np)
-        self.btn_f1_pc2_3_4_ne_np.clicked.connect(self.show_graph_f1_pc2_3_4_ne_np)
+        grid_layout = QGridLayout(self)
 
-        self.layout.addLayout(self.hlyt_buttons)
+        grid_layout.setRowStretch(0, 1)
+        grid_layout.setRowStretch(3, 1)
+        grid_layout.setRowStretch(5, 1)
 
+        grid_layout.addWidget(lbl_v1, 1, 0)
+        grid_layout.addWidget(lbl_select, 1, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(lbl_v2, 1, 3)
+        grid_layout.addWidget(self.cmb_grafic, 2, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(self.btn_generate, 4, 1, 1, 2, alignment=Qt.AlignCenter)
+
+        self.setLayout(grid_layout)
+
+        self.btn_generate.clicked.connect(self.show_selected_graph)
+
+    def show_selected_graph(self):
+        selected_graph = self.cmb_grafic.currentText()
+        if selected_graph.startswith("L3-PC") or selected_graph.startswith("PC1-5-6 (Nivel") or selected_graph.startswith("F1-PC2-3-4 (Nivel"):
+            self.show_graph(selected_graph, mode='markers')
+        elif selected_graph.startswith("PC1-5-6 (Fecha") or selected_graph.startswith("F1-PC2-3-4 (Fecha"):
+            self.show_graph(selected_graph, mode='lines+markers')
+
+    def show_graph(self, graph_type, mode):
+        pass
     def show_graph_pc1(self):
         data = Query.get_l3_pc1()
         if not data:
