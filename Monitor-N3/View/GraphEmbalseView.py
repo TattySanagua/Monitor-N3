@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QMessageBox, QComboBox, QLabel, QGridLayout, QWidget
 from DataBase.Query import Query
 from PyQt5.QtCore import Qt
-from View.GraphView import GraphView
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -13,7 +12,6 @@ class GraphEmbalseView(QWidget):
         self.init_ui()
 
     def init_ui(self):
-
         lbl_select = QLabel("Seleccionar tipo de gráfico", self)
         self.cmb_grafic = QComboBox(self)
         self.cmb_grafic.addItems(["Nivel embalse - Tiempo"])
@@ -45,13 +43,26 @@ class GraphEmbalseView(QWidget):
             return
 
         df = pd.DataFrame(data)
+        df = df.dropna(subset=['fecha'])
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=df['fecha'], y=df['nivel_embalse'], mode='lines+markers'))
         fig.update_layout(
             title='Embalse',
             xaxis_title='Fecha',
             yaxis_title='N.E[msnm]',
-            xaxis=dict(rangeslider=dict(visible=True), type="date")
+            xaxis=dict(
+                rangeselector=dict(
+                    buttons=list([
+                        dict(count=1, label="1month", step="month", stepmode="backward"),
+                        dict(count=6, label="6month", step="month", stepmode="backward"),
+                        dict(count=1, label="YearTodate", step="year", stepmode="todate"),
+                        dict(count=1, label="1year", step="year", stepmode="backward"),
+                        dict(step="all")
+                    ])
+                ),
+                rangeslider=dict(
+                    visible=True),
+                type="date")
         )
         fig.show()
 

@@ -61,7 +61,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
                  "INNER JOIN l3_pc1 using(fecha);")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_l3_pc2():
@@ -69,7 +72,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
                  "INNER JOIN l3_pc2 using(fecha);")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_l3_pc3():
@@ -77,7 +83,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
                  "INNER JOIN l3_pc3 using(fecha);")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_l3_pc4():
@@ -85,7 +94,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
                  "INNER JOIN l3_pc4 using(fecha);")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_l3_pc5():
@@ -93,7 +105,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
                  "INNER JOIN l3_pc5 using(fecha);")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_l3_pc6():
@@ -101,7 +116,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
                  "INNER JOIN l3_pc6 using(fecha);")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_l3_pc7():
@@ -109,7 +127,10 @@ class Query:
         query = ("SELECT fecha, nivel_embalse, nivel_piezometrico FROM embalse "
                  "INNER JOIN l3_pc7 using(fecha);")
         results = database_manager.fetch_data(query)
-        return results
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            return df
+        return pd.DataFrame()
 
     @staticmethod
     def get_embalse_pc1_5_6():
@@ -125,8 +146,7 @@ class Query:
                  "LEFT JOIN l3_pc6 ON embalse.fecha = l3_pc6.fecha;")
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results,
-                              columns=['fecha', 'nivel_embalse', 'nivel_piezometrico_pc1', 'nivel_piezometrico_pc5', 'nivel_piezometrico_pc6'])
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico_pc1', 'nivel_piezometrico_pc5', 'nivel_piezometrico_pc6'])
             return df
         return pd.DataFrame()
     @staticmethod

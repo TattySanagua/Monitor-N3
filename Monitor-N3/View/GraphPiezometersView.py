@@ -1,7 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QMessageBox, QComboBox, QGridLayout, QWidget, QLabel
+from PyQt5.QtWidgets import QPushButton, QMessageBox, QComboBox, QGridLayout, QWidget, QLabel
 from DataBase.Query import Query
-from View.GraphView import GraphView
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -27,6 +26,7 @@ class GraphPiezometrosView(QWidget):
             "L3-PC5 (Nivel embalse - Nivel piezométrico)",
             "L3-PC6 (Nivel embalse - Nivel piezométrico)",
             "L3-PC7 (Nivel embalse - Nivel piezométrico)",
+            "L3-PC7 (Fecha - Nivel piezométrico)",
             "PC1-5-6 (Fecha - Nivel piezométrico)",
             "PC1-5-6 (Nivel embalse - Nivel piezométrico)",
             "F1-PC2-3-4 (Fecha - Nivel piezométrico)",
@@ -53,178 +53,266 @@ class GraphPiezometrosView(QWidget):
 
     def show_selected_graph(self):
         selected_graph = self.cmb_grafic.currentText()
-        if selected_graph.startswith("L3-PC") or selected_graph.startswith("PC1-5-6 (Nivel") or selected_graph.startswith("F1-PC2-3-4 (Nivel"):
-            self.show_graph(selected_graph, mode='markers')
-        elif selected_graph.startswith("PC1-5-6 (Fecha") or selected_graph.startswith("F1-PC2-3-4 (Fecha"):
+        if selected_graph.startswith("PC1-5-6 (Fecha") or selected_graph.startswith("F1-PC2-3-4 (Fecha") or selected_graph.startswith("L3-PC7 (Fecha"):
             self.show_graph(selected_graph, mode='lines+markers')
+        else:
+            self.show_graph(selected_graph, mode='markers')
 
     def show_graph(self, graph_type, mode):
-        pass
-    def show_graph_pc1(self):
-        data = Query.get_l3_pc1()
-        if not data:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
+        data = None
+        x_column = 'nivel_embalse'
+        y_columns = ['nivel_piezometrico']
+        title = graph_type.split(' (')[0]
+        x_title = 'N.E[msnm]'
+        y_title = 'NP'
 
-        df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
-        fig.update_layout(title='L3-PC1', xaxis_title='N.E[msnm]', yaxis_title='NP')
-        fig.show()
+        if graph_type == "L3-PC1 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_l3_pc1()
+        elif graph_type == "L3-PC2 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_l3_pc2()
+        elif graph_type == "L3-PC3 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_l3_pc3()
+        elif graph_type == "L3-PC4 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_l3_pc4()
+        elif graph_type == "L3-PC5 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_l3_pc5()
+        elif graph_type == "L3-PC6 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_l3_pc6()
+        elif graph_type == "L3-PC7 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_l3_pc7()
+        elif graph_type == "L3-PC7 (Fecha - Nivel piezométrico)":
+            data = Query.get_l3_pc7()
+            x_column = 'fecha'
+            y_columns = ['nivel_embalse', 'nivel_piezometrico']
+            x_title = 'Fecha'
+        elif graph_type == "PC1-5-6 (Fecha - Nivel piezométrico)" or graph_type == "PC1-5-6 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_embalse_pc1_5_6()
+            y_columns = ['nivel_embalse', 'nivel_piezometrico_pc1', 'nivel_piezometrico_pc5', 'nivel_piezometrico_pc6']
+            if graph_type == "PC1-5-6 (Fecha - Nivel piezométrico)":
+                x_column = 'fecha'
+                x_title = 'Fecha'
+        elif graph_type == "F1-PC2-3-4 (Fecha - Nivel piezométrico)" or graph_type == "F1-PC2-3-4 (Nivel embalse - Nivel piezométrico)":
+            data = Query.get_embalse_f1_pc2_pc3_pc4()
+            y_columns = ['nivel_freatico', 'nivel_piezometrico_pc2', 'nivel_piezometrico_pc3', 'nivel_piezometrico_pc4']
+            if graph_type == "F1-PC2-3-4 (Fecha - Nivel piezométrico)":
+                x_column = 'fecha'
+                x_title = 'Fecha'
 
-    def show_graph_pc2(self):
-        data = Query.get_l3_pc2()
-        if not data:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
-        fig.update_layout(title='L3-PC2', xaxis_title='N.E[msnm]', yaxis_title='NP')
-        fig.show()
-
-    def show_graph_pc3(self):
-        data = Query.get_l3_pc3()
-        if not data:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
-        fig.update_layout(title='L3-PC3', xaxis_title='N.E[msnm]', yaxis_title='NP')
-        fig.show()
-
-    def show_graph_pc4(self):
-        data = Query.get_l3_pc4()
-        if not data:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
-        fig.update_layout(title='L3-PC4', xaxis_title='N.E[msnm]', yaxis_title='NP')
-        fig.show()
-
-    def show_graph_pc5(self):
-        data = Query.get_l3_pc5()
-        if not data:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
-        fig.update_layout(title='L3-PC5', xaxis_title='N.E[msnm]', yaxis_title='NP')
-        fig.show()
-
-    def show_graph_pc6(self):
-        data = Query.get_l3_pc6()
-        if not data:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
-        fig.update_layout(title='L3-PC6', xaxis_title='N.E[msnm]', yaxis_title='NP')
-        fig.show()
-
-    def show_graph_pc7(self):
-        data = Query.get_l3_pc7()
-        if not data:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['fecha'], y=df['nivel_piezometrico'], mode='lines+markers'))
-        fig.update_layout(title='L3-PC7', xaxis_title='Fecha', yaxis_title='NP')
-        fig.show()
-
-    def show_graph_pc1_5_6_fecha_np(self):
-        data = Query.get_embalse_pc1_5_6()
-        if data.empty:
+        if data is None or len(data) == 0:
             QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
             return
 
         df = pd.DataFrame(data)
-
+        df = df.dropna(subset=[x_column] + y_columns)
         fig = go.Figure()
 
-        fig.add_trace(go.Scatter(x=df['fecha'], y=df['nivel_embalse'], mode='lines+markers', name='Nivel ambalse'))
+        for y_column in y_columns:
+            fig.add_trace(go.Scatter(x=df[x_column], y=df[y_column], mode=mode, name=y_column))
 
-        df_pc1 = df.dropna(subset=['nivel_piezometrico_pc1'])
-        df_pc5 = df.dropna(subset=['nivel_piezometrico_pc5'])
-        df_pc6 = df.dropna(subset=['nivel_piezometrico_pc6'])
-
-        fig.add_trace(go.Scatter(x=df_pc1['fecha'], y=df_pc1['nivel_piezometrico_pc1'], mode='lines+markers', name='PC1'))
-        fig.add_trace(go.Scatter(x=df_pc5['fecha'], y=df_pc5['nivel_piezometrico_pc5'], mode='lines+markers', name='PC5'))
-        fig.add_trace(go.Scatter(x=df_pc6['fecha'], y=df_pc6['nivel_piezometrico_pc6'], mode='lines+markers', name='PC6'))
-
-        fig.update_layout(title='Cronológico PC1-5-6 - Nivel embalse', xaxis_title='Fecha', yaxis_title='NP', legend_title='Piezómetros')
-
+        if x_column == 'fecha':
+            # para gráficos cronológicos
+            fig.update_layout(
+                title=title,
+                xaxis_title=x_title,
+                yaxis_title=y_title,
+                legend_title='Piezómetros',
+                xaxis=dict(
+                    rangeselector=dict(
+                        buttons=list([
+                            dict(count=1, label="1month", step="month", stepmode="backward"),
+                            dict(count=6, label="6month", step="month", stepmode="backward"),
+                            dict(count=1, label="YearTodate", step="year", stepmode="todate"),
+                            dict(count=1, label="1year", step="year", stepmode="backward"),
+                            dict(step="all")
+                        ])
+                    ),
+                    rangeslider=dict(
+                        visible=True
+                    ),
+                    type="date"
+                )
+            )
+        else:
+            # gráficos no cronológicos
+            fig.update_layout(
+                title=title,
+                xaxis_title=x_title,
+                yaxis_title=y_title,
+                legend_title='Piezómetros',
+                xaxis=dict(
+                    rangeslider=dict(
+                        visible=True
+                    )
+                )
+            )
         fig.show()
 
-    def show_graph_pc1_5_6_ne_np(self):
-        data = Query.get_embalse_pc1_5_6()
-        if data.empty:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
 
-        df = pd.DataFrame(data)
-
-        fig = go.Figure()
-
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc1'], mode='lines+markers', name='PC1'))
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc5'], mode='lines+markers', name='PC5'))
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc6'], mode='lines+markers', name='PC6'))
-
-        fig.update_layout(title='Dispersión PC1-5-6', xaxis_title='N.E[msnm]', yaxis_title='NP', legend_title='Piezómetros')
-        fig.show()
-
-
-    def show_graph_f1_pc2_3_4_fecha_np(self):
-        data = Query.get_embalse_f1_pc2_pc3_pc4()
-        if data.empty:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data)
-
-        fig = go.Figure()
-
-        df_f1 = df.dropna(subset=['nivel_freatico'])
-        df_pc2 = df.dropna(subset=['nivel_piezometrico_pc2'])
-        df_pc3 = df.dropna(subset=['nivel_piezometrico_pc3'])
-        df_pc4 = df.dropna(subset=['nivel_piezometrico_pc4'])
-
-        fig.add_trace(go.Scatter(x=df_f1['fecha'], y=df_f1['nivel_freatico'], mode='lines+markers', name='F1'))
-        fig.add_trace(go.Scatter(x=df_pc2['fecha'], y=df_pc2['nivel_piezometrico_pc2'], mode='lines+markers', name='PC2'))
-        fig.add_trace(go.Scatter(x=df_pc3['fecha'], y=df_pc3['nivel_piezometrico_pc3'], mode='lines+markers', name='PC3'))
-        fig.add_trace(go.Scatter(x=df_pc4['fecha'], y=df_pc4['nivel_piezometrico_pc4'], mode='lines+markers', name='PC4'))
-
-        fig.update_layout(title='Cronológico F1-PC2-3-4', xaxis_title='Fecha', yaxis_title='NF/NP', legend_title='Freatímetro - Piezómetros')
-
-        fig.show()
-
-    def show_graph_f1_pc2_3_4_ne_np(self):
-        data = Query.get_embalse_f1_pc2_pc3_pc4()
-        if data.empty:
-            QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
-            return
-
-        df = pd.DataFrame(data)
-
-        fig = go.Figure()
-
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_freatico'], mode='lines+markers', name='F1'))
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc2'], mode='lines+markers', name='PC2'))
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc3'], mode='lines+markers', name='PC3'))
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc4'], mode='lines+markers', name='PC4'))
-
-        fig.update_layout(title='Dispersión F1-PC2-3-4', xaxis_title='N.E[msnm]', yaxis_title='NP', legend_title='Freatímetro - Piezómetros')
-
-        fig.show()
+    # def show_graph_pc1(self):
+    #     data = Query.get_l3_pc1()
+    #     if not data:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
+    #     fig.update_layout(title='L3-PC1', xaxis_title='N.E[msnm]', yaxis_title='NP')
+    #     fig.show()
+    #
+    # def show_graph_pc2(self):
+    #     data = Query.get_l3_pc2()
+    #     if not data:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
+    #     fig.update_layout(title='L3-PC2', xaxis_title='N.E[msnm]', yaxis_title='NP')
+    #     fig.show()
+    #
+    # def show_graph_pc3(self):
+    #     data = Query.get_l3_pc3()
+    #     if not data:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
+    #     fig.update_layout(title='L3-PC3', xaxis_title='N.E[msnm]', yaxis_title='NP')
+    #     fig.show()
+    #
+    # def show_graph_pc4(self):
+    #     data = Query.get_l3_pc4()
+    #     if not data:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
+    #     fig.update_layout(title='L3-PC4', xaxis_title='N.E[msnm]', yaxis_title='NP')
+    #     fig.show()
+    #
+    # def show_graph_pc5(self):
+    #     data = Query.get_l3_pc5()
+    #     if not data:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
+    #     fig.update_layout(title='L3-PC5', xaxis_title='N.E[msnm]', yaxis_title='NP')
+    #     fig.show()
+    #
+    # def show_graph_pc6(self):
+    #     data = Query.get_l3_pc6()
+    #     if not data:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico'], mode='markers'))
+    #     fig.update_layout(title='L3-PC6', xaxis_title='N.E[msnm]', yaxis_title='NP')
+    #     fig.show()
+    #
+    # def show_graph_pc7(self):
+    #     data = Query.get_l3_pc7()
+    #     if not data:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+    #     fig = go.Figure()
+    #     fig.add_trace(go.Scatter(x=df['fecha'], y=df['nivel_piezometrico'], mode='lines+markers'))
+    #     fig.update_layout(title='L3-PC7', xaxis_title='Fecha', yaxis_title='NP')
+    #     fig.show()
+    #
+    # def show_graph_pc1_5_6_fecha_np(self):
+    #     data = Query.get_embalse_pc1_5_6()
+    #     if data.empty:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data)
+    #
+    #     fig = go.Figure()
+    #
+    #     fig.add_trace(go.Scatter(x=df['fecha'], y=df['nivel_embalse'], mode='lines+markers', name='Nivel ambalse'))
+    #
+    #     df_pc1 = df.dropna(subset=['nivel_piezometrico_pc1'])
+    #     df_pc5 = df.dropna(subset=['nivel_piezometrico_pc5'])
+    #     df_pc6 = df.dropna(subset=['nivel_piezometrico_pc6'])
+    #
+    #     fig.add_trace(go.Scatter(x=df_pc1['fecha'], y=df_pc1['nivel_piezometrico_pc1'], mode='lines+markers', name='PC1'))
+    #     fig.add_trace(go.Scatter(x=df_pc5['fecha'], y=df_pc5['nivel_piezometrico_pc5'], mode='lines+markers', name='PC5'))
+    #     fig.add_trace(go.Scatter(x=df_pc6['fecha'], y=df_pc6['nivel_piezometrico_pc6'], mode='lines+markers', name='PC6'))
+    #
+    #     fig.update_layout(title='Cronológico PC1-5-6 - Nivel embalse', xaxis_title='Fecha', yaxis_title='NP', legend_title='Piezómetros')
+    #
+    #     fig.show()
+    #
+    # def show_graph_pc1_5_6_ne_np(self):
+    #     data = Query.get_embalse_pc1_5_6()
+    #     if data.empty:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data)
+    #
+    #     fig = go.Figure()
+    #
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc1'], mode='lines+markers', name='PC1'))
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc5'], mode='lines+markers', name='PC5'))
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc6'], mode='lines+markers', name='PC6'))
+    #
+    #     fig.update_layout(title='Dispersión PC1-5-6', xaxis_title='N.E[msnm]', yaxis_title='NP', legend_title='Piezómetros')
+    #     fig.show()
+    #
+    #
+    # def show_graph_f1_pc2_3_4_fecha_np(self):
+    #     data = Query.get_embalse_f1_pc2_pc3_pc4()
+    #     if data.empty:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data)
+    #
+    #     fig = go.Figure()
+    #
+    #     df_f1 = df.dropna(subset=['nivel_freatico'])
+    #     df_pc2 = df.dropna(subset=['nivel_piezometrico_pc2'])
+    #     df_pc3 = df.dropna(subset=['nivel_piezometrico_pc3'])
+    #     df_pc4 = df.dropna(subset=['nivel_piezometrico_pc4'])
+    #
+    #     fig.add_trace(go.Scatter(x=df_f1['fecha'], y=df_f1['nivel_freatico'], mode='lines+markers', name='F1'))
+    #     fig.add_trace(go.Scatter(x=df_pc2['fecha'], y=df_pc2['nivel_piezometrico_pc2'], mode='lines+markers', name='PC2'))
+    #     fig.add_trace(go.Scatter(x=df_pc3['fecha'], y=df_pc3['nivel_piezometrico_pc3'], mode='lines+markers', name='PC3'))
+    #     fig.add_trace(go.Scatter(x=df_pc4['fecha'], y=df_pc4['nivel_piezometrico_pc4'], mode='lines+markers', name='PC4'))
+    #
+    #     fig.update_layout(title='Cronológico F1-PC2-3-4', xaxis_title='Fecha', yaxis_title='NF/NP', legend_title='Freatímetro - Piezómetros')
+    #
+    #     fig.show()
+    #
+    # def show_graph_f1_pc2_3_4_ne_np(self):
+    #     data = Query.get_embalse_f1_pc2_pc3_pc4()
+    #     if data.empty:
+    #         QMessageBox.warning(self, "Advertencia", "No hay datos disponibles para mostrar.")
+    #         return
+    #
+    #     df = pd.DataFrame(data)
+    #
+    #     fig = go.Figure()
+    #
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_freatico'], mode='lines+markers', name='F1'))
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc2'], mode='lines+markers', name='PC2'))
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc3'], mode='lines+markers', name='PC3'))
+    #     fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_piezometrico_pc4'], mode='lines+markers', name='PC4'))
+    #
+    #     fig.update_layout(title='Dispersión F1-PC2-3-4', xaxis_title='N.E[msnm]', yaxis_title='NP', legend_title='Freatímetro - Piezómetros')
+    #
+    #     fig.show()
