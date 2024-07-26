@@ -1,5 +1,7 @@
 import math
-from PyQt5.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QWidget, QLabel, QGridLayout
 from DataBase.Query import Query
 
 class TablaEmbalseView(QMainWindow):
@@ -7,11 +9,28 @@ class TablaEmbalseView(QMainWindow):
         super(TablaEmbalseView,self).__init__()
         self.setWindowTitle("Tabla de Embasle y Precipitaciones")
         self.setGeometry(150, 100, 1100, 700)
-        self.create_table()
+        self.create_layout()
 
-    def create_table(self):
-        self.tableWidget = QTableWidget(self)
-        self.tableWidget.setGeometry(50, 50, 1000, 600)
+    def create_layout(self):
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        lbl_v1 = QLabel("")
+        lbl_v2 = QLabel("")
+
+        layout = QGridLayout()
+        central_widget.setLayout(layout)
+
+        self.tableWidget = QTableWidget()
+        layout.addWidget(lbl_v1, 0, 0, 1, 1)
+        layout.addWidget(self.tableWidget, 0, 1, 1, 1)
+        layout.addWidget(lbl_v2, 0, 2, 1, 1)
+        footer_label = QLabel("© 2024 Tatiana Sanagua - ORSEP. All rights reserved.")
+        footer_label.setStyleSheet("font-size: 12px; color: gray;")
+        footer_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(footer_label, 2, 1, 1, 1)
+        layout.setRowStretch(0, 1)
+        layout.setRowStretch(1, 0)
+
         self.update_table()
 
     def update_table(self):

@@ -40,6 +40,9 @@ class EmbalseView(QWidget):
         self.btn_guardar = QPushButton("Guardar", self)
         self.btn_guardar.setObjectName("btn")
 
+        footer_label = QLabel("© 2024 Tatiana Sanagua - ORSEP. All rights reserved.")
+        footer_label.setStyleSheet("font-size: 12px; color: gray;")
+
         grid_layout = QGridLayout(self)
 
         grid_layout.setRowStretch(0, 1)
@@ -65,6 +68,7 @@ class EmbalseView(QWidget):
         grid_layout.addWidget(self.lned_nivel_embalse, 10, 2, alignment=Qt.AlignLeft)
         grid_layout.addWidget(lbl_m, 10, 3, alignment=Qt.AlignLeft)
         grid_layout.addWidget(self.btn_guardar, 12, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(footer_label, 17, 1, 1, 2, alignment=Qt.AlignCenter)
 
         self.setLayout(grid_layout)
 

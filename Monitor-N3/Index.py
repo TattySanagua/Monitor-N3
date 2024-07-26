@@ -15,6 +15,8 @@ from View.GraphEmbalseView import GraphEmbalseView
 from View.GraphFreatimeterView import GraphFreatimeterView
 from View.GraphPiezometersView import GraphPiezometrosView
 from View.GraphAforadorView import GraphAforadorView
+from View.InstrumentsView import InstrumentsView
+from View.FormInstrumentView import FormInstrumentsView
 import sys
 import os
 
@@ -26,7 +28,7 @@ class Monitor(QMainWindow):
         self.setWindowTitle("Monitor N3")
         # screen_size = QDesktopWidget().screenGeometry()
         self.setGeometry(300, 130, 530, 650)
-        self.setWindowIcon(QIcon("LogoOrsep.jpg"))
+        self.setWindowIcon(QIcon("../LogoOrsep.jpg"))
         self.tabla_embalse_precipitacion = TablaEmbalseView()
         self.home_view = HomeView(self.tabla_embalse_precipitacion)
 
@@ -49,6 +51,8 @@ class Monitor(QMainWindow):
         self.graph_freatimeter_view = GraphFreatimeterView()
         self.graph_piezometros_view = GraphPiezometrosView()
         self.graph_aforador_view = GraphAforadorView()
+        self.tabla_instrumentos_view = InstrumentsView()
+        self.formulario_instrumentos_view = FormInstrumentsView()
 
     def create_menu(self):
         #Menu bar
@@ -122,6 +126,10 @@ class Monitor(QMainWindow):
         menu_aforadores.addAction(action_aforadores)
 
         #
+        action_instrumentos = QAction("Instrumentos", self)
+        action_instrumentos.triggered.connect(self.show_instrumentos_view)
+        menu_instrumentos.addAction(action_instrumentos)
+
         action_instrumentos = QAction("Agregar nuevo", self)
         action_instrumentos.triggered.connect(self.show_nuevo_instrumento_view)
         menu_instrumentos.addAction(action_instrumentos)
@@ -184,8 +192,10 @@ class Monitor(QMainWindow):
     def show_grafico_aforadores_view(self):
         self.graph_aforador_view.show()
 
+    def show_instrumentos_view(self):
+        self.tabla_instrumentos_view.show()
     def show_nuevo_instrumento_view(self):
-        pass
+        self.formulario_instrumentos_view.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

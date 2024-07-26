@@ -8,7 +8,7 @@ class GraphFreatimeterView(QWidget):
     def __init__(self):
         super(GraphFreatimeterView, self).__init__()
         self.setWindowTitle("Gráficos Freatimetro")
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(300, 130, 400, 400)
         self.init_ui()
 
     def init_ui(self):
@@ -18,6 +18,9 @@ class GraphFreatimeterView(QWidget):
         lbl_v1 = QLabel("")
         lbl_v2 = QLabel("")
         self.btn_generate = QPushButton("Graficar")
+
+        footer_label = QLabel("© 2024 Tatiana Sanagua - ORSEP. All rights reserved.")
+        footer_label.setStyleSheet("font-size: 12px; color: gray;")
 
         grid_layout = QGridLayout()
 
@@ -30,6 +33,7 @@ class GraphFreatimeterView(QWidget):
         grid_layout.addWidget(lbl_v2, 1, 3)
         grid_layout.addWidget(self.cmb_grafic, 2, 1, 1, 2, alignment=Qt.AlignCenter)
         grid_layout.addWidget(self.btn_generate, 4, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(footer_label, 6, 1, 1, 2, alignment=Qt.AlignCenter)
 
         self.setLayout(grid_layout)
 

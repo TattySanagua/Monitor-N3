@@ -20,6 +20,9 @@ class GraphEmbalseView(QWidget):
 
         self.btn_generate = QPushButton("Graficar")
 
+        footer_label = QLabel("© 2024 Tatiana Sanagua - ORSEP. All rights reserved.")
+        footer_label.setStyleSheet("font-size: 12px; color: gray;")
+
         grid_layout = QGridLayout()
 
         grid_layout.setRowStretch(0, 1)
@@ -31,6 +34,7 @@ class GraphEmbalseView(QWidget):
         grid_layout.addWidget(lbl_v2, 1, 3)
         grid_layout.addWidget(self.cmb_grafic, 2, 1, 1, 2, alignment=Qt.AlignCenter)
         grid_layout.addWidget(self.btn_generate, 4, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(footer_label, 6, 1, 1, 2, alignment=Qt.AlignCenter)
 
         self.setLayout(grid_layout)
 

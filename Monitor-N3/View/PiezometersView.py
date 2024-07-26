@@ -59,6 +59,9 @@ class PiezometersView(QWidget):
         self.btn_guardar_nps = QPushButton("Guardar", self)
         self.btn_guardar_nps.setObjectName("btn")
 
+        footer_label = QLabel("© 2024 Tatiana Sanagua - ORSEP. All rights reserved.")
+        footer_label.setStyleSheet("font-size: 12px; color: gray;")
+
         grid_layout = QGridLayout(self)
 
         grid_layout.setRowStretch(0, 1)
@@ -73,7 +76,6 @@ class PiezometersView(QWidget):
         grid_layout.setRowStretch(15, 1)
         grid_layout.setRowStretch(16, 1)
         grid_layout.setRowStretch(17, 1)
-        grid_layout.setRowStretch(18, 1)
 
         grid_layout.addWidget(lbl_titulo_ppal, 4, 1, 1, 2, alignment=Qt.AlignCenter)
         grid_layout.addWidget(lbl_v1, 6, 0)
@@ -88,6 +90,7 @@ class PiezometersView(QWidget):
         grid_layout.addWidget(self.lbl_msnm, 12, 3, alignment=Qt.AlignLeft)
         grid_layout.addWidget(self.btn_calcular_nps, 14, 1, 1, 1, alignment=Qt.AlignCenter)
         grid_layout.addWidget(self.btn_guardar_nps, 14, 2, 1, 1, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(footer_label, 18, 1, 1, 2, alignment=Qt.AlignCenter)
 
         self.setLayout(grid_layout)
 

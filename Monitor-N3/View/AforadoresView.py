@@ -110,10 +110,12 @@ class AforadoresView(QWidget):
         self.btn_calcular_caudales.setObjectName("btn")
         self.btn_guardar_caudales = QPushButton("Guardar", self)
         self.btn_guardar_caudales.setObjectName("btn")
+        footer_label = QLabel("© 2024 Tatiana Sanagua - ORSEP. All rights reserved.")
+        footer_label.setStyleSheet("font-size: 12px; color: gray;")
 
         grid_layout = QGridLayout(self)
 
-        grid_layout.setRowStretch(0, 1)
+        #grid_layout.setRowStretch(0, 1)
         grid_layout.setRowStretch(3, 1)
         grid_layout.setRowStretch(10, 1)
         grid_layout.setRowStretch(16, 1)
@@ -193,6 +195,7 @@ class AforadoresView(QWidget):
 
         grid_layout.addWidget(self.btn_calcular_caudales, 24, 2, 1, 1, alignment=Qt.AlignCenter)
         grid_layout.addWidget(self.btn_guardar_caudales, 24, 4, 1, 1, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(footer_label, 25, 2, 1, 3, alignment=Qt.AlignCenter)
 
         self.setLayout(grid_layout)
 
