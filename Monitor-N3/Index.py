@@ -143,8 +143,9 @@ class Monitor(QMainWindow):
         self.setCentralWidget(self.central_widget)
 
     def show_precipitacion_view(self):
-        self.central_widget = PrecipitacionView(self.tabla_embalse_precipitacion)
-        self.setCentralWidget(self.central_widget)
+        pass
+        # self.central_widget = PrecipitacionView(self.tabla_embalse_precipitacion)
+        # self.setCentralWidget(self.central_widget)
     def show_tabla_embalse_view(self):
         if not self.tabla_embalse_precipitacion:
             self.tabla_embalse_precipitacion = TablaEmbalseView()

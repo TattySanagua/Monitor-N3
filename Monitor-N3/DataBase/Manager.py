@@ -4,7 +4,7 @@ class DatabaseManager:
 
     def __init__(self):
         self.connection = mysql.connector.connect(
-            host="localhost",
+            host="192.168.1.113",
             user="root",
             password = "orsep929",
             database = "monitor"
