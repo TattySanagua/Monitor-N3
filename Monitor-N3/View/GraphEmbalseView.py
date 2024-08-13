@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt5.QtWidgets import QPushButton, QMessageBox, QComboBox, QLabel, QGridLayout, QWidget
 from DataBase.Query import Query
 from PyQt5.QtCore import Qt
@@ -47,9 +49,36 @@ class GraphEmbalseView(QWidget):
             return
 
         df = pd.DataFrame(data)
+
+        # Asegurarse de que la columna 'fecha' está en formato datetime
+        df['fecha'] = pd.to_datetime(df['fecha'])
         df = df.dropna(subset=['fecha'])
+
+        current_year = datetime.now().year
+        df_last_year = df[df['fecha'].dt.year == current_year]
+        df_previous_years = df[df['fecha'].dt.year < current_year]
+
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['fecha'], y=df['nivel_embalse'], mode='lines+markers'))
+
+        # Graficar los datos de los años anteriores
+        fig.add_trace(go.Scatter(
+            x=df_previous_years['fecha'],
+            y=df_previous_years['nivel_embalse'],
+            mode='lines+markers',
+            name=f'N.E. anteriores a {current_year}',
+            line=dict(color='blue')
+        ))
+
+        # Graficar los datos del último año en un color diferente
+        if not df_last_year.empty:
+            fig.add_trace(go.Scatter(
+                x=df_last_year['fecha'],
+                y=df_last_year['nivel_embalse'],
+                mode='lines+markers',
+                name=f'N.E. {current_year}',
+                line=dict(color='red')
+            ))
+
         fig.update_layout(
             title='Embalse',
             xaxis_title='Fecha',
@@ -64,9 +93,10 @@ class GraphEmbalseView(QWidget):
                         dict(step="all")
                     ])
                 ),
-                rangeslider=dict(
-                    visible=True),
-                type="date")
+                rangeslider=dict(visible=True),
+                type="date"
+            )
         )
+
         fig.show()
 

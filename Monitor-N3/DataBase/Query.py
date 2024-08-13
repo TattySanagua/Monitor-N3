@@ -17,14 +17,18 @@ class Query:
     @staticmethod
     def get_precipiaciones():
         database_manager = DatabaseManager()
-        query = ("SELECT embalse.fecha, embalse.nivel_embalse, "
-                     "precipitacion.valor, "
-                     "precipitacion.tres_dias_previos, "
-                     "precipitacion.cinco_dias_previos, "
-                     "precipitacion.diez_dias_previos "
-                     "FROM embalse "
-                     "LEFT JOIN precipitacion ON embalse.fecha = precipitacion.fecha "
-                     "ORDER BY fecha DESC;")
+        query = ("SELECT e.fecha, "
+                    "e.nivel_embalse, " 
+                    "p.valor, "
+                    "(SELECT p3.valor FROM precipitacion p3 "
+                        "WHERE p3.fecha = DATE_SUB(e.fecha, INTERVAL 3 DAY)) AS tres_dias_previos,"
+                    "(SELECT p5.valor FROM precipitacion p5 "
+                        "WHERE p5.fecha = DATE_SUB(e.fecha, INTERVAL 5 DAY)) AS cinco_dias_previos, "
+                    "(SELECT p10.valor FROM precipitacion p10 "
+                        "WHERE p10.fecha = DATE_SUB(e.fecha, INTERVAL 10 DAY)) AS diez_dias_previos "
+                 "FROM embalse e "
+                 "LEFT JOIN precipitacion p ON e.fecha = p.fecha "
+                 "ORDER BY e.fecha DESC;")
         results = database_manager.fetch_data(query)
         return results
 
@@ -227,10 +231,10 @@ class Query:
         database_manager.execute_query(query)
 
     @staticmethod
-    def insert_data_precipitaciones(fecha, valor, tres, cinco, diez):
+    def insert_data_precipitaciones(fecha, valor):
         database_manager = DatabaseManager()
-        query = (f"INSERT INTO precipitacion (fecha, valor, tres_dias_previos, cinco_dias_previos, diez_dias_previos) "
-                 f"VALUES ('{fecha}', {valor}, {tres}, {cinco}, {diez});")
+        query = (f"INSERT INTO precipitacion (fecha, valor) "
+                 f"VALUES ('{fecha}', {valor});")
         database_manager.execute_query(query)
 
     @staticmethod

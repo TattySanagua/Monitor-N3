@@ -49,18 +49,33 @@ class GraphFreatimeterView(QWidget):
 
         df = pd.DataFrame(data)
 
+        # Asegurarse de que la columna 'fecha' está en formato datetime
+        df['fecha'] = pd.to_datetime(df['fecha'])
+        df = df.dropna(subset=['fecha', 'nivel_embalse', 'nivel_freatico'])
+
+        # Obtener los años únicos en los datos
+        unique_years = df['fecha'].dt.year.unique()
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df['nivel_embalse'], y=df['nivel_freatico'], mode='markers', name='markers'))
+
+        # Iterar sobre cada año y agregar una traza diferente
+        for year in unique_years:
+            df_year = df[df['fecha'].dt.year == year]
+            fig.add_trace(go.Scatter(
+                x=df_year['nivel_embalse'],
+                y=df_year['nivel_freatico'],
+                mode='markers',
+                name=str(year),
+                marker=dict(size=10)
+            ))
 
         fig.update_layout(
             title='L3-F1',
             xaxis_title='Nivel de Embalse',
             yaxis_title='Nivel Freático',
             xaxis=dict(
-                rangeslider=dict(
-                    visible=True
-                )
-            )
+                rangeslider=dict(visible=True)
+            ),
+            legend_title='Años'
         )
 
         fig.show()

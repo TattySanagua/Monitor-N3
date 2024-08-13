@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QMessageBox, QWidget, QLabel, QComboBox, QGridLayout
 from DataBase.Query import Query
@@ -84,14 +86,35 @@ class GraphAforadorView(QWidget):
             return
 
         df = pd.DataFrame(data)
+
+        # Asegurarse de que la columna 'fecha' está en formato datetime si existe en el DataFrame
+        if 'fecha' in df.columns:
+            df['fecha'] = pd.to_datetime(df['fecha'])
+
         df = df.dropna(subset=[x_column] + y_columns)
         fig = go.Figure()
 
+        color_map = ['blue', 'green', 'red', 'orange', 'purple', 'brown', 'pink']  # Lista de colores
+
         if x_column == 'fecha':
-            # para gráficos cronológicos con dos ejes Y
+            current_year = datetime.now().year
+            df_last_year = df[df[x_column].dt.year == current_year]
+
             fig.add_trace(
-                go.Scatter(x=df[x_column], y=df['nivel_embalse'], mode=mode, name='Nivel embalse', yaxis='y1'))
-            fig.add_trace(go.Scatter(x=df[x_column], y=df['caudal'], mode=mode, name='Caudal', yaxis='y2'))
+                go.Scatter(x=df[x_column], y=df['nivel_embalse'], mode=mode, name='Nivel embalse', yaxis='y1',
+                           line=dict(color='blue')))
+            fig.add_trace(go.Scatter(x=df[x_column], y=df['caudal'], mode=mode, name='Caudal', yaxis='y2',
+                                     line=dict(color='green')))
+
+            # Graficar el último año en un color diferente
+            if not df_last_year.empty:
+                fig.add_trace(
+                    go.Scatter(x=df_last_year[x_column], y=df_last_year['nivel_embalse'], mode=mode,
+                               name=f'Nivel embalse {current_year}', yaxis='y1', line=dict(color='red')))
+                fig.add_trace(
+                    go.Scatter(x=df_last_year[x_column], y=df_last_year['caudal'], mode=mode,
+                               name=f'Caudal {current_year}', yaxis='y2', line=dict(color='orange')))
+
             fig.update_layout(
                 title=title,
                 xaxis=dict(
@@ -112,9 +135,23 @@ class GraphAforadorView(QWidget):
                 yaxis2=dict(title='Caudal [l/s]', overlaying='y', side='right', showgrid=False)
             )
         else:
-            # gráficos no cronológicos
-            for y_column in y_columns:
-                fig.add_trace(go.Scatter(x=df[x_column], y=df[y_column], mode=mode, name=y_column))
+            if 'fecha' in df.columns:
+                unique_years = df['fecha'].dt.year.unique()
+                for i, year in enumerate(unique_years):
+                    df_year = df[df['fecha'].dt.year == year]
+                    for y_column in y_columns:
+                        fig.add_trace(go.Scatter(
+                            x=df_year[x_column],
+                            y=df_year[y_column],
+                            mode=mode,
+                            name=f'{y_column} ({year})',
+                            marker=dict(color=color_map[i % len(color_map)])
+                        ))
+            else:
+                # Si no hay columna 'fecha', simplemente graficar los datos sin diferenciar por año
+                for y_column in y_columns:
+                    fig.add_trace(go.Scatter(x=df[x_column], y=df[y_column], mode=mode, name=y_column))
+
             fig.update_layout(
                 title=title,
                 xaxis_title=x_title,
@@ -123,3 +160,4 @@ class GraphAforadorView(QWidget):
                 xaxis=dict(rangeslider=dict(visible=True))
             )
         fig.show()
+

@@ -60,8 +60,9 @@ class Monitor(QMainWindow):
         menu_inicio = menu_bar.addMenu("Inicio")
         menu_embalse = menu_bar.addMenu("Embalse")
         menu_piezometros = menu_bar.addMenu("Piezómetros")
-        menu_freatimetro = menu_bar.addMenu("Freatímetro")
+        menu_freatimetro = menu_bar.addMenu("Freatímetros")
         menu_aforadores = menu_bar.addMenu("Aforadores")
+        menu_graficos = menu_bar.addMenu("Gráficos")
         menu_instrumentos = menu_bar.addMenu("Instrumentos")
 
         #Acciones
@@ -126,6 +127,11 @@ class Monitor(QMainWindow):
         menu_aforadores.addAction(action_aforadores)
 
         #
+        action_graficos = QAction("Personalizados", self)
+        action_graficos.triggered.connect(self.show_graficos_personalizados_view)
+        menu_graficos.addAction(action_graficos)
+
+        #
         action_instrumentos = QAction("Instrumentos", self)
         action_instrumentos.triggered.connect(self.show_instrumentos_view)
         menu_instrumentos.addAction(action_instrumentos)
@@ -143,9 +149,8 @@ class Monitor(QMainWindow):
         self.setCentralWidget(self.central_widget)
 
     def show_precipitacion_view(self):
-        pass
-        # self.central_widget = PrecipitacionView(self.tabla_embalse_precipitacion)
-        # self.setCentralWidget(self.central_widget)
+        self.central_widget = PrecipitacionView(self.tabla_embalse_precipitacion)
+        self.setCentralWidget(self.central_widget)
     def show_tabla_embalse_view(self):
         if not self.tabla_embalse_precipitacion:
             self.tabla_embalse_precipitacion = TablaEmbalseView()
@@ -192,7 +197,8 @@ class Monitor(QMainWindow):
 
     def show_grafico_aforadores_view(self):
         self.graph_aforador_view.show()
-
+    def show_graficos_personalizados_view(self):
+        pass
     def show_instrumentos_view(self):
         self.tabla_instrumentos_view.show()
     def show_nuevo_instrumento_view(self):

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QPushButton, QMessageBox, QComboBox, QGridLayout, QWidget, QLabel
 from DataBase.Query import Query
@@ -107,20 +109,35 @@ class GraphPiezometrosView(QWidget):
             return
 
         df = pd.DataFrame(data)
+
+        # Asegurarse de que la columna 'fecha' está en formato datetime si existe en el DataFrame
+        if 'fecha' in df.columns:
+            df['fecha'] = pd.to_datetime(df['fecha'])
+
         df = df.dropna(subset=[x_column] + y_columns)
         fig = go.Figure()
 
-        for y_column in y_columns:
-            fig.add_trace(go.Scatter(x=df[x_column], y=df[y_column], mode=mode, name=y_column))
+        color_map = ['blue', 'green', 'red', 'orange', 'purple', 'brown', 'pink']  # Lista de colores
 
         if x_column == 'fecha':
-            # para gráficos cronológicos
+            current_year = datetime.now().year
+            df_last_year = df[df[x_column].dt.year == current_year]
+
+            for y_column in y_columns:
+                fig.add_trace(go.Scatter(x=df[x_column], y=df[y_column], mode=mode, name=y_column))
+
+            # Graficar el último año en un color diferente
+            if not df_last_year.empty:
+                for y_column in y_columns:
+                    fig.add_trace(
+                        go.Scatter(x=df_last_year[x_column], y=df_last_year[y_column], mode=mode,
+                                   name=f'{y_column} {current_year}', line=dict(color=color_map[0])))
+                    color_map.pop(0)  # Elimina el primer color para que no se repita
+
             fig.update_layout(
                 title=title,
-                xaxis_title=x_title,
-                yaxis_title=y_title,
-                legend_title='Piezómetros',
                 xaxis=dict(
+                    title=x_title,
                     rangeselector=dict(
                         buttons=list([
                             dict(count=1, label="1month", step="month", stepmode="backward"),
@@ -130,23 +147,34 @@ class GraphPiezometrosView(QWidget):
                             dict(step="all")
                         ])
                     ),
-                    rangeslider=dict(
-                        visible=True
-                    ),
+                    rangeslider=dict(visible=True),
                     type="date"
-                )
+                ),
+                yaxis=dict(title='Nivel piezométrico', showgrid=True)
             )
         else:
-            # gráficos no cronológicos
+            if 'fecha' in df.columns:
+                unique_years = df['fecha'].dt.year.unique()
+                for i, year in enumerate(unique_years):
+                    df_year = df[df['fecha'].dt.year == year]
+                    for y_column in y_columns:
+                        fig.add_trace(go.Scatter(
+                            x=df_year[x_column],
+                            y=df_year[y_column],
+                            mode=mode,
+                            name=f'{y_column} ({year})',
+                            marker=dict(color=color_map[i % len(color_map)])
+                        ))
+            else:
+                # Si no hay columna 'fecha', simplemente graficar los datos sin diferenciar por año
+                for y_column in y_columns:
+                    fig.add_trace(go.Scatter(x=df[x_column], y=df[y_column], mode=mode, name=y_column))
+
             fig.update_layout(
                 title=title,
                 xaxis_title=x_title,
                 yaxis_title=y_title,
                 legend_title='Piezómetros',
-                xaxis=dict(
-                    rangeslider=dict(
-                        visible=True
-                    )
-                )
+                xaxis=dict(rangeslider=dict(visible=True))
             )
         fig.show()

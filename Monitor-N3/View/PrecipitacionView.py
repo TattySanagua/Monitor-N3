@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, QDate, QTime
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QDateEdit, \
-    QTimeEdit, QMessageBox
+    QTimeEdit, QMessageBox, QGridLayout
 from mysql.connector import IntegrityError
 from DataBase.Query import Query
 from Signals.DataUpdater import DataUpdater
@@ -19,76 +19,51 @@ class PrecipitacionView(QWidget):
         lbl_titulo_ppal = QLabel("PRECIPITACIONES", self)
         lbl_titulo_ppal.setObjectName("title2")
         lbl_fecha = QLabel("Fecha", self)
-        lbl_fecha.setFixedWidth(110)
-        lbl_precipitacion = QLabel("Precipitación", self)
-        lbl_precipitacion.setFixedWidth(110)
-        lbl_tres = QLabel("Tres días previos", self)
-        lbl_tres.setFixedWidth(110)
-        lbl_cinco = QLabel("Cinco días previos", self)
-        lbl_cinco.setFixedWidth(110)
-        lbl_diez = QLabel("Diez días previos", self)
-        lbl_diez.setFixedWidth(110)
+        lbl_precipitacion = QLabel("Valor", self)
+        lbl_mm = QLabel("mm", self)
+        lbl_v1 = QLabel("", self)
 
         self.date_edit = QDateEdit(self)
         self.date_edit.setCalendarPopup(True)
-        self.date_edit.setFixedWidth(160)
+        self.date_edit.setFixedWidth(170)
         self.date_edit.setDate(QDate.currentDate())
 
         self.lned_precipitacion = QLineEdit(self)
-        self.lned_precipitacion.setFixedWidth(160)
-
-        self.lned_tres_dias_previos = QLineEdit(self)
-        self.lned_tres_dias_previos.setFixedWidth(160)
-
-        self.lned_cinco_dias_previos = QLineEdit(self)
-        self.lned_cinco_dias_previos.setFixedWidth(160)
-
-        self.lned_diez_dias_previos = QLineEdit(self)
-        self.lned_diez_dias_previos.setFixedWidth(160)
+        self.lned_precipitacion.setFixedWidth(170)
 
         self.btn_guardar = QPushButton("Guardar", self)
         self.btn_guardar.setObjectName("btn")
-        self.btn_guardar.setFixedWidth(130)
 
-        hlyt_fecha = QHBoxLayout()
-        hlyt_fecha.addWidget(lbl_fecha, alignment=Qt.AlignCenter)
-        hlyt_fecha.addWidget(self.date_edit, alignment=Qt.AlignCenter)
+        footer_label = QLabel("© 2024 Tatiana Sanagua - ORSEP. All rights reserved.")
+        footer_label.setStyleSheet("font-size: 12px; color: gray;")
 
-        hlyt_precipitacion = QHBoxLayout()
-        hlyt_precipitacion.addWidget(lbl_precipitacion)
-        hlyt_precipitacion.addWidget(self.lned_precipitacion)
+        grid_layout = QGridLayout(self)
 
-        hlyt_tres = QHBoxLayout()
-        hlyt_tres.addWidget(lbl_tres)
-        hlyt_tres.addWidget(self.lned_tres_dias_previos)
+        grid_layout.setRowStretch(0, 1)
+        grid_layout.setRowStretch(2, 1)
+        grid_layout.setRowStretch(4, 1)
+        grid_layout.setRowStretch(6, 1)
+        grid_layout.setRowStretch(8, 1)
 
-        hlyt_cinco = QHBoxLayout()
-        hlyt_cinco.addWidget(lbl_cinco)
-        hlyt_cinco.addWidget(self.lned_cinco_dias_previos)
+        grid_layout.addWidget(lbl_titulo_ppal, 1, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(lbl_v1, 3, 0)
+        grid_layout.addWidget(lbl_fecha, 3, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.date_edit, 3, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(lbl_precipitacion, 5, 1, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.lned_precipitacion, 5, 2, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(lbl_mm, 5, 3, alignment=Qt.AlignLeft)
+        grid_layout.addWidget(self.btn_guardar, 7, 1, 1, 2, alignment=Qt.AlignCenter)
+        grid_layout.addWidget(footer_label, 9, 1, 1, 2, alignment=Qt.AlignCenter)
 
-        hlyt_diez = QHBoxLayout()
-        hlyt_diez.addWidget(lbl_diez)
-        hlyt_diez.addWidget(self.lned_diez_dias_previos)
-
-        vlyt_principal = QVBoxLayout(self)
-        vlyt_principal.setAlignment(Qt.AlignVCenter)
-
-        vlyt_principal.addWidget(lbl_titulo_ppal, alignment=Qt.AlignCenter)
-        vlyt_principal.addLayout(hlyt_fecha)
-        vlyt_principal.addLayout(hlyt_precipitacion)
-        vlyt_principal.addLayout(hlyt_tres)
-        vlyt_principal.addLayout(hlyt_cinco)
-        vlyt_principal.addLayout(hlyt_diez)
-        vlyt_principal.addWidget(self.btn_guardar, alignment=Qt.AlignCenter)
+        self.setLayout(grid_layout)
 
         self.btn_guardar.clicked.connect(self.guardar)
+
+
 
     def guardar(self):
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
         precipitacion = self.lned_precipitacion.text()
-        tres = self.lned_tres_dias_previos.text()
-        cinco = self.lned_cinco_dias_previos.text()
-        diez = self.lned_diez_dias_previos.text()
 
         if not fecha:
             QMessageBox.warning(self, "Error", "Debe ingresar una fecha.")
@@ -96,16 +71,10 @@ class PrecipitacionView(QWidget):
         else:
             try:
                 precipitacion = float(precipitacion) if precipitacion else "NULL"
-                tres = float(tres) if tres else "NULL"
-                cinco = float(cinco) if cinco else "NULL"
-                diez = float(diez) if diez else "NULL"
 
-                Query.insert_data_precipitaciones(fecha, precipitacion, tres, cinco, diez)
+                Query.insert_data_precipitaciones(fecha, precipitacion,)
 
                 self.lned_precipitacion.clear()
-                self.lned_tres_dias_previos.clear()
-                self.lned_cinco_dias_previos.clear()
-                self.lned_diez_dias_previos.clear()
 
                 QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
                 self.data_updater.update_data()

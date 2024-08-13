@@ -25,17 +25,17 @@ class EmbalseView(QWidget):
         lbl_v1 = QLabel("", self)
 
         self.date_edit = QDateEdit(self)
-        self.date_edit.setFixedWidth(150)
+        self.date_edit.setFixedWidth(160)
         self.date_edit.setCalendarPopup(True)
         self.date_edit.setDate(QDate.currentDate())
 
         self.time_edit = QTimeEdit(self)
-        self.time_edit.setFixedWidth(150)
+        self.time_edit.setFixedWidth(160)
         self.time_edit.setDisplayFormat("hh:mm")
         self.time_edit.setTime(QTime.currentTime())
 
         self.lned_nivel_embalse = QLineEdit(self)
-        self.lned_nivel_embalse.setFixedWidth(150)
+        self.lned_nivel_embalse.setFixedWidth(160)
 
         self.btn_guardar = QPushButton("Guardar", self)
         self.btn_guardar.setObjectName("btn")

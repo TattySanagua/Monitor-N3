@@ -6,9 +6,21 @@ __pycache__/
 *.sqlite
 *.ini
 
-# Directorios de entornos virtuales (si usas venv, virtualenv, etc.)
+# Archivos y directorios de build
+build/
+dist/
+
+# Directorios de entornos virtuales
 venv/
 env/
 virtualenv/
 
 .idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de PyInstaller
+*.spec
+
+# Archivos binarios generados
+*.exe
