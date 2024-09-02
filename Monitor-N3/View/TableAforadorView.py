@@ -1,5 +1,6 @@
 import math
 
+import pandas as pd
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QLabel, QWidget, QVBoxLayout, QGridLayout
 from DataBase.Query import Query
@@ -37,25 +38,24 @@ class TablaAforadoresView(QMainWindow):
         self.tableWidget.clear()
         data = Query.get_embalse_aforadores()
 
-        if not data:  # Verificar si data está vacío
+        if data.empty:
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             column_names = ["Fecha", "Nivel de embalse [msnm]", "Caudal AFo3-EI [l/s]", "Caudal AFo3-PP [l/s]",
-                            "Caudal AFo3-TOT [l/s]", "Caudal Parshall[m3/s]"]
-
+                            "Caudal AFo3-TOT [l/s]"]
             self.tableWidget.setHorizontalHeaderLabels(column_names)
             return
 
         self.tableWidget.setRowCount(len(data))
-        self.tableWidget.setColumnCount(len(data[0]))
+        self.tableWidget.setColumnCount(len(data.columns))
 
-        column_names = ["Fecha", "Nivel de embalse [msnm]", "Caudal AFo3-EI [l/s]", "Caudal AFo3-PP [l/s]", "Caudal AFo3-TOT [l/s]", "Caudal Parshall[m3/s]"]
+        column_names = ["Fecha", "Nivel de embalse [msnm]", "Caudal AFo3-EI [l/s]", "Caudal AFo3-PP [l/s]", "Caudal AFo3-TOT [l/s]"]
 
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
-        for i, row in enumerate(data):
+        for i, row in data.iterrows():
             for j, item in enumerate(row):
-                if item is None or (isinstance(item, float) and math.isnan(item)):
+                if pd.isnull(item):
                     item = '-'
                 elif j == 0:
                     formatted_date = item.strftime("%d/%m/%Y")

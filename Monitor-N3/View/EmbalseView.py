@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QDate, QTime
-from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QPushButton, QDateEdit, \
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QDateEdit, \
     QTimeEdit, QMessageBox, QGridLayout
 from mysql.connector import IntegrityError
 from DataBase.Query import Query
