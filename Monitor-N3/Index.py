@@ -51,8 +51,9 @@ class Monitor(QMainWindow):
         self.graph_freatimeter_view = GraphFreatimeterView()
         self.graph_piezometros_view = GraphPiezometrosView()
         self.graph_aforador_view = GraphAforadorView()
+
         self.tabla_instrumentos_view = InstrumentsView()
-        self.formulario_instrumentos_view = FormInstrumentsView()
+        self.formulario_instrumentos_view = FormInstrumentsView(self.tabla_instrumentos_view)
 
     def create_menu(self):
         #Menu bar
@@ -179,10 +180,6 @@ class Monitor(QMainWindow):
             self.tabla_freatimetro_view = TablaFreatimetroView()
         self.tabla_freatimetro_view.show()
 
-    # def update_tabla_freatimetro(self):
-    #     if self.tabla_freatimetro_view:
-    #         self.tabla_freatimetro_view.update_table()
-
     def show_grafico_freatimetro_view(self):
         self.graph_freatimeter_view.show()
 
@@ -199,10 +196,14 @@ class Monitor(QMainWindow):
         self.graph_aforador_view.show()
     def show_graficos_personalizados_view(self):
         pass
-    def show_instrumentos_view(self):
-        self.tabla_instrumentos_view.show()
     def show_nuevo_instrumento_view(self):
-        self.formulario_instrumentos_view.show()
+        self.central_widget = FormInstrumentsView(self.tabla_instrumentos_view)
+        self.setCentralWidget(self.central_widget)
+    def show_instrumentos_view(self):
+        if not self.tabla_instrumentos_view:
+            self.tabla_instrumentos_view = InstrumentsView()
+        self.tabla_instrumentos_view.show()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -2,15 +2,17 @@ import math
 
 from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QLabel, QDateEdit, QLineEdit, QComboBox, \
-    QPushButton, QGridLayout, QWidget
+    QPushButton, QGridLayout, QWidget, QMessageBox
 from DataBase.Query import Query
+from Signals.DataUpdater import DataUpdater
 
 class FormInstrumentsView(QWidget):
-    def __init__(self):
+    def __init__(self, tabla_instrumentos):
         super(FormInstrumentsView,self).__init__()
-        self.setWindowTitle("Agregar Instrumento")
-        self.setGeometry(300, 130, 300, 300)
         self.setup_ui()
+        self.tabla_instrumentos = tabla_instrumentos
+        self.data_updater = DataUpdater()
+        self.data_updater.data_updated_signal.connect(self.actualizar_tabla)
 
     def setup_ui(self):
         lbl_titulo_ppal = QLabel("Formulario de instrumento", self)
@@ -31,7 +33,10 @@ class FormInstrumentsView(QWidget):
 
         self.cmb_tipe = QComboBox(self)
         self.cmb_tipe.setFixedWidth(180)
-        self.cmb_tipe.addItems(["PIEZOMETRO", "FREATIMETRO", "AFORADOR VOLUMETRICO", "AFORADOR PARSHALL"])
+        data_tipo = Query.get_tipo()
+        if not data_tipo.empty:
+            tipos_list = data_tipo['Tipo'].tolist()
+            self.cmb_tipe.addItems(tipos_list)
 
         self.btn_guardar = QPushButton("Guardar", self)
         self.btn_guardar.setObjectName("btn")
@@ -65,6 +70,26 @@ class FormInstrumentsView(QWidget):
         self.btn_guardar.clicked.connect(self.guardar)
 
     def guardar(self):
+        nombre = self.lned_nombre.text().strip()
+        tipo_nombre = self.cmb_tipe.currentText().strip()
         fecha = self.date_edit.date().toString("yyyy-MM-dd")
 
-        nivel_embalse = self.lned_nivel_embalse.text()
+
+        if not nombre or not tipo_nombre:
+            QMessageBox.warning(self, "Advertencia", "Todos los campos son obligatorios.")
+            return
+
+        id_tipo = Query.get_tipo_id(tipo_nombre)
+
+        if id_tipo:
+            Query.insert_data_instrument(nombre, id_tipo, fecha)
+            self.lned_nombre.clear()
+            QMessageBox.information(self, "Éxito", "Instrumento guardado exitosamente.")
+            self.data_updater.update_data()
+
+        else:
+            QMessageBox.warning(self, "Error", "No se pudo encontrar el tipo de instrumento.")
+
+
+    def actualizar_tabla(self):
+        self.tabla_instrumentos.update_table()
