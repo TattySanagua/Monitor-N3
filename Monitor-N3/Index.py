@@ -11,6 +11,7 @@ from View.TableEmbalseView import TablaEmbalseView
 from View.TablePiezometerView import TablaPiezometrosView
 from View.TableFreatimeterView import TablaFreatimetroView
 from View.TableAforadorView import TablaAforadoresView
+from View.GraphView import GraphView
 from View.GraphEmbalseView import GraphEmbalseView
 from View.GraphFreatimeterView import GraphFreatimeterView
 from View.GraphPiezometersView import GraphPiezometrosView
@@ -47,6 +48,7 @@ class Monitor(QMainWindow):
         self.tabla_embalse_aforadores = TablaAforadoresView()
         self.aforadores_view = AforadoresView(self.tabla_embalse_aforadores)
 
+        self.graph_view = GraphView()
         self.graph_embalse_view = GraphEmbalseView()
         self.graph_freatimeter_view = GraphFreatimeterView()
         self.graph_piezometros_view = GraphPiezometrosView()
@@ -195,7 +197,8 @@ class Monitor(QMainWindow):
     def show_grafico_aforadores_view(self):
         self.graph_aforador_view.show()
     def show_graficos_personalizados_view(self):
-        pass
+        self.central_widget = GraphView()
+        self.setCentralWidget(self.central_widget)
     def show_nuevo_instrumento_view(self):
         self.central_widget = FormInstrumentsView(self.tabla_instrumentos_view)
         self.setCentralWidget(self.central_widget)
