@@ -46,6 +46,17 @@ class Query:
         return pd.DataFrame()
 
     @staticmethod
+    def get_instrumentos_por_tipo(tipo):
+        database_manager = DatabaseManager()
+        query = """SELECT nombre, nombre_tipo, fecha_alta, fecha_baja, activo 
+                        FROM instrumento INNER JOIN tipo USING(id_tipo) WHERE nombre_tipo = {tipo};"""
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results, columns=['Nombre', 'Tipo', 'Fecha de instalación', 'Fecha de baja', 'Activo'])
+            return df
+        return pd.DataFrame()
+
+    @staticmethod
     def get_tipo():
         database_manager = DatabaseManager()
         query = "SELECT nombre_tipo FROM tipo;"
@@ -310,6 +321,25 @@ class Query:
         results = database_manager.fetch_data(query)
         if results:
             df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
+            return df
+        return pd.DataFrame()
+
+    @staticmethod
+    def get_all():
+        database_manager = DatabaseManager()
+        query = ("""SELECT e.fecha, e.nivel_embalse, i.id_instrumento, i.nombre, 
+                            ma.valor AS caudal, 
+                            mf.valor AS nivel_freatico, 
+                            mp.valor AS nivel_piezometrico
+                    FROM embalse e LEFT JOIN medicion_aforador ma ON e.fecha = DATE(ma.fecha)
+                                LEFT JOIN medicion_freatimetro mf ON e.fecha = DATE(mf.fecha)
+                                LEFT JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
+                                LEFT JOIN instrumento i ON (mp.id_instrumento = i.id_instrumento 
+                                                            OR mf.id_instrumento = i.id_instrumento
+                                                            OR ma.id_instrumento = i.id_instrumento);""")
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'id_instrumento', 'nombre', 'caudal', 'nivel_freatico', 'nivel_piezometrico'])
             return df
         return pd.DataFrame()
 
