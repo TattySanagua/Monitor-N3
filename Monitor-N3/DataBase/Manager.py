@@ -7,7 +7,7 @@ class DatabaseManager:
             host="localhost",
             user="root",
             password = "orsep929",
-            database = "db_monitor"
+            database = "db_monitor3"
         )
         self.cursor = self.connection.cursor()
 

@@ -34,31 +34,51 @@ class TablaFreatimetroView(QMainWindow):
 
     def update_table(self):
         self.tableWidget.clear()
-        data = Query.get_l3_f1()
+        data = Query.get_embalse_freatimetros()
 
         if data.empty:
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
-            column_names = ["Fecha", "Nivel de embalse [msnm]", "Nivel freático [msnm]"]
-
+            column_names = ["Fecha", "Nivel de embalse [msnm]"]
             self.tableWidget.setHorizontalHeaderLabels(column_names)
             return
 
+        column_names = ["Fecha", "Nivel de embalse [msnm]"]
+        freatimetro_columns = []
+
+        for i, row in data.iterrows():
+            freatimetros_concatenados = row['nivel_freatico']
+            freatimetros = freatimetros_concatenados.split('; ')
+
+            for freatimetro in freatimetros:
+                nombre_freatimetro, _ = freatimetro.split('; ')
+                if nombre_freatimetro not in freatimetro_columns:
+                    freatimetro_columns.append(nombre_freatimetro)
+
+        column_names.extend(freatimetro_columns)
+
         self.tableWidget.setRowCount(len(data))
-        self.tableWidget.setColumnCount(len(data.columns))
-
-        column_names = ["Fecha", "Nivel de embalse [msnm]", "Nivel freático [msnm]"]
-
+        self.tableWidget.setColumnCount(len(column_names))
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
         for i, row in data.iterrows():
-            for j, item in enumerate(row):
-                if pd.isnull(item):
-                    item = '-'
-                elif j == 0:
-                    formatted_date = item.strftime("%d/%m/%Y")
-                    self.tableWidget.setItem(i, j, QTableWidgetItem(formatted_date))
-                    continue
-                self.tableWidget.setItem(i, j, QTableWidgetItem(str(item)))
+            fecha = row['fecha']
+            nivel_embalse = row['nivel_embalse']
+            formatted_date = fecha.strftime("%d/%m/%Y")
+            self.tableWidget.setItem(i, 0, QTableWidgetItem(formatted_date))
+            self.tableWidget.setItem(i, 1, QTableWidgetItem(str(nivel_embalse)))
+
+            freatimetros_concatenados = row['nivel_freatico']
+            freatimetros = freatimetros_concatenados.split('; ')
+
+            freatimetro_dict = {}
+
+            for freatimetro in freatimetros:
+                nombre_freatimetro, valor = freatimetro.split(': ')
+                freatimetro_dict[nombre_freatimetro] = valor
+
+            for j, freatimetro_name in enumerate(freatimetro_columns, start=2):
+                valor = freatimetro_dict.get(freatimetro_name, '-')
+                self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
 
         self.tableWidget.resizeColumnsToContents()
