@@ -36,31 +36,52 @@ class TablaPiezometrosView(QMainWindow):
 
     def update_table(self):
         self.tableWidget.clear()
-        data = Query.get_embalse_7piezometros()
+        data = Query.get_embalse_piezometros()
 
         if data.empty:
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
-            column_names = ["Fecha", "Nivel de embalse [msnm]", "Np PC1 [msnm]", "Np PC2 [msnm]", "Np PC3 [msnm]",
-                            "Np PC4 [msnm]", "Np PC5 [msnm]", "Np PC6 [msnm]", "Np PC7 [msnm]"]
+            column_names = ["Fecha", "Nivel de embalse [msnm]"]
             self.tableWidget.setHorizontalHeaderLabels(column_names)
             return
 
+        column_names = ["Fecha", "Nivel de embalse [msnm]"]
+        piezometro_columns = []
+
+        for i, row in data.iterrows():
+            piezometros_concatenados = row['nivel_piezometrico']
+            piezometros = piezometros_concatenados.split('; ')
+
+            for piezometro in piezometros:
+                nombre_piezometro, _ = piezometro.split('; ')
+                if nombre_piezometro not in piezometro_columns:
+                    piezometro_columns.append(nombre_piezometro)
+
+        column_names.extend(piezometro_columns)
+
         self.tableWidget.setRowCount(len(data))
-        self.tableWidget.setColumnCount(len(data.columns))
-
-        column_names = ["Fecha", "Nivel de embalse [msnm]", "Np PC1 [msnm]", "Np PC2 [msnm]", "Np PC3 [msnm]", "Np PC4 [msnm]", "Np PC5 [msnm]", "Np PC6 [msnm]", "Np PC7 [msnm]"]
-
+        self.tableWidget.setColumnCount(len(column_names))
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
         for i, row in data.iterrows():
-            for j, item in enumerate(row):
-                if pd.isnull(item):
-                    item = '-'
-                elif j == 0:
-                    formatted_date = item.strftime("%d/%m/%Y")
-                    self.tableWidget.setItem(i, j, QTableWidgetItem(formatted_date))
-                    continue
-                self.tableWidget.setItem(i, j, QTableWidgetItem(str(item)))
+            fecha = row['fecha']
+            nivel_embalse = row['nivel_embalse']
+            formatted_date = fecha.strftime("%d/%m/%Y")
+            self.tableWidget.setItem(i, 0, QTableWidgetItem(formatted_date))
+            self.tableWidget.setItem(i, 1, QTableWidgetItem(str(nivel_embalse)))
+
+            piezometros_concatenados = row['nivel_piezometrico']
+            piezometros = piezometros_concatenados.split('; ')
+
+            piezometro_dict = {}
+
+            for piezometro in piezometros:
+                nombre_piezometro, valor = piezometro.split(': ')
+                piezometro_dict[nombre_piezometro] = valor
+
+            for j, piezometro_name in enumerate(piezometro_columns, start=2):
+                valor = piezometro_dict.get(piezometro_name, '-')
+                self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
+
 
         self.tableWidget.resizeColumnsToContents()

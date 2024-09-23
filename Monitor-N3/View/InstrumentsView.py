@@ -41,14 +41,14 @@ class InstrumentsView(QMainWindow):
         if data.empty:
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
-            column_names = ["Nombre", "Tipo", "Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
+            column_names = ["Nombre", "Tipo", "Medición", "Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
             self.tableWidget.setHorizontalHeaderLabels(column_names)
             return
 
         self.tableWidget.setRowCount(len(data))
         self.tableWidget.setColumnCount(len(data.columns) + 1)
 
-        column_names = ["Nombre", "Tipo", "Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
+        column_names = ["Nombre", "Tipo", "Medición", "Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
 
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 

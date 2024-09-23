@@ -37,11 +37,11 @@ class Query:
     @staticmethod
     def get_instrumentos():
         database_manager = DatabaseManager()
-        query = """SELECT nombre, nombre_tipo, fecha_alta, fecha_baja, activo 
+        query = """SELECT nombre, nombre_tipo, tipo_medicion, fecha_alta, fecha_baja, activo 
                     FROM instrumento INNER JOIN tipo USING(id_tipo);"""
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['Nombre', 'Tipo', 'Fecha de instalación', 'Fecha de baja', 'Activo'])
+            df = pd.DataFrame(results, columns=['Nombre', 'Tipo', 'Medición', 'Fecha de instalación', 'Fecha de baja', 'Activo'])
             return df
         return pd.DataFrame()
 
@@ -76,126 +76,33 @@ class Query:
         return None
 
     @staticmethod
-    def get_embalse_7piezometros():
+    def get_embalse_piezometros():
         database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, 
-                        mp1.valor AS nivel_piezometrico_pc1, 
-                        mp2.valor AS nivel_piezometrico_pc2, 
-                        mp3.valor AS nivel_piezometrico_pc3, 
-                        mp4.valor AS nivel_piezometrico_pc4, 
-                        mp5.valor AS nivel_piezometrico_pc5, 
-                        mp6.valor AS nivel_piezometrico_pc6, 
-                        mp7.valor AS nivel_piezometrico_pc7
-                    FROM embalse e
-                    LEFT JOIN medicion_piezometro mp1 ON e.fecha = DATE(mp1.fecha) 
-                        AND mp1.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC1')
-                    LEFT JOIN medicion_piezometro mp2 ON e.fecha = DATE(mp2.fecha) 
-                        AND mp2.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC2')
-                    LEFT JOIN medicion_piezometro mp3 ON e.fecha = DATE(mp3.fecha) 
-                        AND mp3.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC3')
-                    LEFT JOIN medicion_piezometro mp4 ON e.fecha = DATE(mp4.fecha) 
-                        AND mp4.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC4')
-                    LEFT JOIN medicion_piezometro mp5 ON e.fecha = DATE(mp5.fecha) 
-                        AND mp5.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC5')
-                    LEFT JOIN medicion_piezometro mp6 ON e.fecha = DATE(mp6.fecha) 
-                        AND mp6.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC6')
-                    LEFT JOIN medicion_piezometro mp7 ON e.fecha = DATE(mp7.fecha) 
-                        AND mp7.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC7')
-                    WHERE mp1.valor IS NOT NULL
-                        OR mp2.valor IS NOT NULL
-                        OR mp3.valor IS NOT NULL
-                        OR mp4.valor IS NOT NULL
-                        OR mp5.valor IS NOT NULL
-                        OR mp6.valor IS NOT NULL
-                        OR mp7.valor IS NOT NULL
+        query = ("""SELECT e.fecha, e.nivel_embalse, GROUP_CONCAT(CONCAT(i.nombre, ': ', IFNULL(m.valor, '-')) 
+                    ORDER BY i.nombre SEPARATOR '; ') AS nivel_piezometrico 
+                    FROM embalse e 
+                    LEFT JOIN instrumento i ON i.id_tipo = (SELECT id_tipo FROM tipo WHERE nombre_tipo = 'PIEZÓMETRO') AND i.activo = 1 
+                    LEFT JOIN medicion m ON e.fecha = DATE(m.fecha) AND m.id_instrumento = i.id_instrumento 
+                    GROUP BY e.fecha, e.nivel_embalse 
                     ORDER BY e.fecha DESC;""")
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico_pc1', 'nivel_piezometrico_pc2', 'nivel_piezometrico_pc3', 'nivel_piezometrico_pc4', 'nivel_piezometrico_pc5', 'nivel_piezometrico_pc6', 'nivel_piezometrico_pc7'])
-            return df
-        return pd.DataFrame()
-
-    @staticmethod
-    def get_l3_pc1():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_piezometrico
-                    FROM embalse e INNER JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC1');""")
-        results = database_manager.fetch_data(query)
-        if results:
             df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
             return df
         return pd.DataFrame()
 
     @staticmethod
-    def get_l3_pc2():
+    def get_piezometros_data():
         database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_piezometrico
-                    FROM embalse e INNER JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC2');""")
+        query = ("""SELECT e.fecha, e.nivel_embalse, i.nombre, m.valor AS nivel_piezometrico
+                    FROM embalse e 
+                    LEFT JOIN medicion m ON e.fecha = DATE(m.fecha)
+                    LEFT JOIN instrumento i ON m.id_instrumento = i.id_instrumento
+                    WHERE i.id_tipo = (SELECT id_tipo FROM tipo WHERE nombre_tipo = 'PIEZÓMETRO') AND i.activo = 1 
+                    ORDER BY e.fecha DESC;""")
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-            return df
-        return pd.DataFrame()
-
-    @staticmethod
-    def get_l3_pc3():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_piezometrico
-                    FROM embalse e INNER JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC3');""")
-        results = database_manager.fetch_data(query)
-        if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-            return df
-        return pd.DataFrame()
-
-    @staticmethod
-    def get_l3_pc4():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_piezometrico
-                    FROM embalse e INNER JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC4');""")
-        results = database_manager.fetch_data(query)
-        if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-            return df
-        return pd.DataFrame()
-
-    @staticmethod
-    def get_l3_pc5():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_piezometrico
-                    FROM embalse e INNER JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC5');""")
-        results = database_manager.fetch_data(query)
-        if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-            return df
-        return pd.DataFrame()
-
-    @staticmethod
-    def get_l3_pc6():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_piezometrico
-                    FROM embalse e INNER JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC6');""")
-        results = database_manager.fetch_data(query)
-        if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
-            return df
-        return pd.DataFrame()
-
-    @staticmethod
-    def get_l3_pc7():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_piezometrico
-                    FROM embalse e INNER JOIN medicion_piezometro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC7');""")
-        results = database_manager.fetch_data(query)
-        if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico'])
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nombre', 'nivel_piezometrico'])
             return df
         return pd.DataFrame()
 
@@ -222,15 +129,34 @@ class Query:
             df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_piezometrico_pc1', 'nivel_piezometrico_pc5', 'nivel_piezometrico_pc6'])
             return df
         return pd.DataFrame()
+
     @staticmethod
-    def get_l3_f1():
+    def get_embalse_freatimetros():
         database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, mp.valor AS nivel_freatico
-                    FROM embalse e INNER JOIN medicion_freatimetro mp ON e.fecha = DATE(mp.fecha)
-                    WHERE mp.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-F1');""")
+        query = ("""SELECT e.fecha, e.nivel_embalse, GROUP_CONCAT(CONCAT(i.nombre, ': ', IFNULL(m.valor, '-')) 
+                        ORDER BY i.nombre SEPARATOR '; ') AS nivel_freatico 
+                        FROM embalse e 
+                        LEFT JOIN instrumento i ON i.id_tipo = (SELECT id_tipo FROM tipo WHERE nombre_tipo = 'FREATÍMETRO') AND i.activo = 1 
+                        LEFT JOIN medicion m ON e.fecha = DATE(m.fecha) AND m.id_instrumento = i.id_instrumento 
+                        GROUP BY e.fecha, e.nivel_embalse 
+                        ORDER BY e.fecha DESC;""")
         results = database_manager.fetch_data(query)
         if results:
             df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nivel_freatico'])
+            return df
+        return pd.DataFrame()
+    @staticmethod
+    def get_freatimetros_data():
+        database_manager = DatabaseManager()
+        query = ("""SELECT e.fecha, e.nivel_embalse, i.nombre, m.valor AS nivel_freatico
+                    FROM embalse e 
+                    LEFT JOIN medicion m ON e.fecha = DATE(m.fecha)
+                    LEFT JOIN instrumento i ON m.id_instrumento = i.id_instrumento
+                    WHERE i.id_tipo = (SELECT id_tipo FROM tipo WHERE nombre_tipo = 'FREATÍMETRO') AND i.activo = 1
+                    ORDER BY e.fecha DESC;""")
+        results = database_manager.fetch_data(query)
+        if results:
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nombre', 'nivel_freatico'])
             return df
         return pd.DataFrame()
 
@@ -268,61 +194,36 @@ class Query:
     def get_embalse_aforadores():
         database_manager = DatabaseManager()
         query = ("""SELECT e.fecha, e.nivel_embalse, 
-                        ma1.valor AS caudal1, 
-                        ma2.valor AS caudal2, 
-                        ma3.valor AS caudal3
-                    FROM embalse e
-                    LEFT JOIN medicion_aforador ma1 ON e.fecha = DATE(ma1.fecha) 
-                        AND ma1.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'AFO3-EI')
-                    LEFT JOIN medicion_aforador ma2 ON e.fecha = DATE(ma2.fecha) 
-                        AND ma2.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'AFO3-PP')
-                    LEFT JOIN medicion_aforador ma3 ON e.fecha = DATE(ma3.fecha) 
-                        AND ma3.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'AFO3-TOT')
-                    WHERE ma1.valor IS NOT NULL
-                        OR ma2.valor IS NOT NULL
-                        OR ma3.valor IS NOT NULL
+                    GROUP_CONCAT(CONCAT(i.nombre, ': ', IFNULL(m.valor, '-')) ORDER BY i.nombre SEPARATOR '; ') AS caudal
+                    FROM embalse e 
+                    LEFT JOIN instrumento i ON i.id_instrumento = i.id_instrumento 
+                    LEFT JOIN tipo t ON i.id_tipo = t.id_tipo 
+                    LEFT JOIN medicion m ON e.fecha = DATE(m.fecha) AND m.id_instrumento = i.id_instrumento 
+                    WHERE t.nombre_tipo LIKE '%AFORADOR%' AND i.activo = 1 
+                    GROUP BY e.fecha, e.nivel_embalse 
                     ORDER BY e.fecha DESC;""")
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal_ei', 'caudal_pp', 'caudal_tot'])
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
             return df
         return results
 
     @staticmethod
-    def get_afo3_tot():
+    def get_aforadores_data():
         database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, ma.valor AS caudal
-                    FROM embalse e INNER JOIN medicion_aforador ma ON e.fecha = DATE(ma.fecha)
-                    WHERE ma.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'AFO3-TOT');""")
+        query = ("""SELECT e.fecha, e.nivel_embalse, i.nombre, m.valor AS caudal
+                    FROM embalse e 
+                    LEFT JOIN medicion m ON e.fecha = DATE(m.fecha)
+                    LEFT JOIN instrumento i ON m.id_instrumento = i.id_instrumento
+                    LEFT JOIN tipo t ON i.id_tipo = t.id_tipo
+                    WHERE t.nombre_tipo LIKE '%AFORADOR%' AND i.activo = 1
+                    ORDER BY e.fecha DESC;""")
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
+            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nombre', 'caudal'])
             return df
         return pd.DataFrame()
 
-    @staticmethod
-    def get_afo3_ei():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, ma.valor AS caudal
-                    FROM embalse e INNER JOIN medicion_aforador ma ON e.fecha = DATE(ma.fecha)
-                    WHERE ma.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'AFO3-EI');""")
-        results = database_manager.fetch_data(query)
-        if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
-            return df
-        return pd.DataFrame()
-
-    @staticmethod
-    def get_afo3_pp():
-        database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, ma.valor AS caudal
-                    FROM embalse e INNER JOIN medicion_aforador ma ON e.fecha = DATE(ma.fecha)
-                    WHERE ma.id_instrumento = (SELECT id_instrumento FROM instrumento WHERE nombre = 'AFO3-PP');""")
-        results = database_manager.fetch_data(query)
-        if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'caudal'])
-            return df
-        return pd.DataFrame()
 
     @staticmethod
     def get_all():
@@ -343,6 +244,7 @@ class Query:
             return df
         return pd.DataFrame()
 
+    ####
     @staticmethod
     def insert_data_embalse(fecha, hora, nivel_ambalse):
         database_manager = DatabaseManager()

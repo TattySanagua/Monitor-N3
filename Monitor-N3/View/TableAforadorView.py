@@ -41,26 +41,46 @@ class TablaAforadoresView(QMainWindow):
         if data.empty:
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
-            column_names = ["Fecha", "Nivel de embalse [msnm]", "Caudal AFo3-EI [l/s]", "Caudal AFo3-PP [l/s]",
-                            "Caudal AFo3-TOT [l/s]"]
+            column_names = ["Fecha", "Nivel de embalse [msnm]"]
             self.tableWidget.setHorizontalHeaderLabels(column_names)
             return
 
+        column_names = ["Fecha", "Nivel de embalse [msnm]"]
+        aforadores_columns = []
+
+        for i, row in data.iterrows():
+            aforadores_concatenados = row['caudal']
+            aforadores = aforadores_concatenados.split('; ')
+
+            for aforador in aforadores:
+                nombre_aforador, _ = aforador.split('; ')
+                if nombre_aforador not in aforadores_columns:
+                    aforadores_columns.append(nombre_aforador)
+
+        column_names.extend(aforadores_columns)
+
         self.tableWidget.setRowCount(len(data))
-        self.tableWidget.setColumnCount(len(data.columns))
-
-        column_names = ["Fecha", "Nivel de embalse [msnm]", "Caudal AFo3-EI [l/s]", "Caudal AFo3-PP [l/s]", "Caudal AFo3-TOT [l/s]"]
-
+        self.tableWidget.setColumnCount(len(column_names))
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
         for i, row in data.iterrows():
-            for j, item in enumerate(row):
-                if pd.isnull(item):
-                    item = '-'
-                elif j == 0:
-                    formatted_date = item.strftime("%d/%m/%Y")
-                    self.tableWidget.setItem(i, j, QTableWidgetItem(formatted_date))
-                    continue
-                self.tableWidget.setItem(i, j, QTableWidgetItem(str(item)))
+            fecha = row['fecha']
+            nivel_embalse = row['nivel_embalse']
+            formatted_date = fecha.strftime("%d/%m/%Y")
+            self.tableWidget.setItem(i, 0, QTableWidgetItem(formatted_date))
+            self.tableWidget.setItem(i, 1, QTableWidgetItem(str(nivel_embalse)))
+
+            aforadores_concatenados = row['caudal']
+            aforadores = aforadores_concatenados.split('; ')
+
+            aforador_dict = {}
+
+            for aforador in aforadores:
+                nombre_aforador, valor = aforador.split(': ')
+                aforador_dict[nombre_aforador] = valor
+
+            for j, aforador_name in enumerate(aforadores_columns, start=2):
+                valor = aforador_dict.get(aforador_name, '-')
+                self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
 
         self.tableWidget.resizeColumnsToContents()
