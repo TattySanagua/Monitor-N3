@@ -50,10 +50,18 @@ class TablaPiezometrosView(QMainWindow):
 
         for i, row in data.iterrows():
             piezometros_concatenados = row['nivel_piezometrico']
+
+            if not piezometros_concatenados:
+                continue
+
             piezometros = piezometros_concatenados.split('; ')
 
             for piezometro in piezometros:
-                nombre_piezometro, _ = piezometro.split('; ')
+                if ': ' in piezometro:
+                    nombre_piezometro, _ = piezometro.split(': ')
+                else:
+                    nombre_piezometro = piezometro
+
                 if nombre_piezometro not in piezometro_columns:
                     piezometro_columns.append(nombre_piezometro)
 
@@ -71,17 +79,22 @@ class TablaPiezometrosView(QMainWindow):
             self.tableWidget.setItem(i, 1, QTableWidgetItem(str(nivel_embalse)))
 
             piezometros_concatenados = row['nivel_piezometrico']
-            piezometros = piezometros_concatenados.split('; ')
 
-            piezometro_dict = {}
+            if piezometros_concatenados:
+                piezometros = piezometros_concatenados.split('; ')
 
-            for piezometro in piezometros:
-                nombre_piezometro, valor = piezometro.split(': ')
-                piezometro_dict[nombre_piezometro] = valor
+                piezometro_dict = {}
 
-            for j, piezometro_name in enumerate(piezometro_columns, start=2):
-                valor = piezometro_dict.get(piezometro_name, '-')
-                self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
+                for piezometro in piezometros:
+                    if ': ' in piezometro:
+                        nombre_piezometro, valor = piezometro.split(': ')
+                    else:
+                        nombre_piezometro = piezometro
+                        valor = '-'
+                    piezometro_dict[nombre_piezometro] = valor
 
+                for j, piezometro_name in enumerate(piezometro_columns, start=2):
+                    valor = piezometro_dict.get(piezometro_name, '-')
+                    self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
 
         self.tableWidget.resizeColumnsToContents()

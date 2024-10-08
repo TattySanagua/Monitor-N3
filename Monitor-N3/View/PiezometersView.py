@@ -36,8 +36,10 @@ class PiezometersView(QWidget):
 
         self.cmbx_piezometro = QComboBox(self)
         self.cmbx_piezometro.setFixedWidth(150)
-        self.cmbx_piezometro.addItems(["L3-PC1", "L3-PC2", "L3-PC3", "L3-PC4", "L3-PC5", "L3-PC6", "L3-PC7"])
-        self.cmbx_piezometro.currentIndexChanged.connect(self.actualizar_piezometro)
+        data_tipo = Query.get_piezometros_data()
+        if not data_tipo.empty:
+            piezometros_list = data_tipo['nombre'].tolist()
+            self.cmbx_piezometro.addItems(piezometros_list)
 
         self.lbl_Np = QLabel("Nivel piezométrico = ")
         self.lbl_resultado = QLabel("")

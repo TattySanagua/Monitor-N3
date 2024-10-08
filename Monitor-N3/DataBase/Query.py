@@ -37,11 +37,11 @@ class Query:
     @staticmethod
     def get_instrumentos():
         database_manager = DatabaseManager()
-        query = """SELECT nombre, nombre_tipo, tipo_medicion, fecha_alta, fecha_baja, activo 
+        query = """SELECT nombre, nombre_tipo, tipo_medicion, cb, angulo_cenital_instalacion, k, fecha_alta, fecha_baja, activo 
                     FROM instrumento INNER JOIN tipo USING(id_tipo);"""
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['Nombre', 'Tipo', 'Medición', 'Fecha de instalación', 'Fecha de baja', 'Activo'])
+            df = pd.DataFrame(results, columns=['Nombre', 'Tipo', 'Medición', 'CB', 'Ángulo cenital de instalación', 'k', 'Fecha de instalación', 'Fecha de baja', 'Activo'])
             return df
         return pd.DataFrame()
 
@@ -70,6 +70,16 @@ class Query:
     def get_tipo_id(nombre_tipo):
         database_manager = DatabaseManager()
         query = f"SELECT id_tipo FROM tipo WHERE nombre_tipo = '{nombre_tipo}';"
+        results = database_manager.fetch_data(query)
+        if results:
+            return results[0][0]
+        return None
+
+    @staticmethod
+    def get_parametro(nombre_instrumento, nombre_parametro):
+        database_manager = DatabaseManager()
+        query = (f"SELECT valor FROM parametro INNER JOIN instrumento USING(id_instrumento) "
+                 f"     WHERE parametro.nombre_parametro = '{nombre_parametro}' AND instrumento.nombre = '{nombre_instrumento}';")
         results = database_manager.fetch_data(query)
         if results:
             return results[0][0]

@@ -48,10 +48,20 @@ class TablaFreatimetroView(QMainWindow):
 
         for i, row in data.iterrows():
             freatimetros_concatenados = row['nivel_freatico']
+
+            if not freatimetros_concatenados:
+                continue
+
             freatimetros = freatimetros_concatenados.split('; ')
 
             for freatimetro in freatimetros:
-                nombre_freatimetro, _ = freatimetro.split('; ')
+                if ': ' in freatimetro:
+                    nombre_freatimetro, _ = freatimetro.split(': ')
+                else:
+                    # Si no hay valor asociado, solo se tiene el nombre
+                    nombre_freatimetro = freatimetro
+
+                # Añadir el nombre del freatímetro a las columnas si no está ya
                 if nombre_freatimetro not in freatimetro_columns:
                     freatimetro_columns.append(nombre_freatimetro)
 
@@ -69,16 +79,24 @@ class TablaFreatimetroView(QMainWindow):
             self.tableWidget.setItem(i, 1, QTableWidgetItem(str(nivel_embalse)))
 
             freatimetros_concatenados = row['nivel_freatico']
-            freatimetros = freatimetros_concatenados.split('; ')
 
-            freatimetro_dict = {}
+            if freatimetros_concatenados:
+                freatimetros = freatimetros_concatenados.split('; ')
 
-            for freatimetro in freatimetros:
-                nombre_freatimetro, valor = freatimetro.split(': ')
-                freatimetro_dict[nombre_freatimetro] = valor
+                # Crear un diccionario para almacenar los valores de cada freatímetro
+                freatimetro_dict = {}
 
-            for j, freatimetro_name in enumerate(freatimetro_columns, start=2):
-                valor = freatimetro_dict.get(freatimetro_name, '-')
-                self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
+                for freatimetro in freatimetros:
+                    if ': ' in freatimetro:
+                        nombre_freatimetro, valor = freatimetro.split(': ')
+                    else:
+                        nombre_freatimetro = freatimetro
+                        valor = '-'
+                    freatimetro_dict[nombre_freatimetro] = valor
+
+                # Llenar la tabla con los valores correspondientes
+                for j, freatimetro_name in enumerate(freatimetro_columns, start=2):
+                    valor = freatimetro_dict.get(freatimetro_name, '-')
+                    self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
 
         self.tableWidget.resizeColumnsToContents()

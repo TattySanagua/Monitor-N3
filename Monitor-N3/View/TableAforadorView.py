@@ -50,10 +50,18 @@ class TablaAforadoresView(QMainWindow):
 
         for i, row in data.iterrows():
             aforadores_concatenados = row['caudal']
+
+            if not aforadores_concatenados:
+                continue
+
             aforadores = aforadores_concatenados.split('; ')
 
             for aforador in aforadores:
-                nombre_aforador, _ = aforador.split('; ')
+                if ': ' in aforador:
+                    nombre_aforador, _ = aforador.split(': ')
+                else:
+                    nombre_aforador = aforador
+
                 if nombre_aforador not in aforadores_columns:
                     aforadores_columns.append(nombre_aforador)
 
@@ -71,16 +79,22 @@ class TablaAforadoresView(QMainWindow):
             self.tableWidget.setItem(i, 1, QTableWidgetItem(str(nivel_embalse)))
 
             aforadores_concatenados = row['caudal']
-            aforadores = aforadores_concatenados.split('; ')
 
-            aforador_dict = {}
+            if aforadores_concatenados:
+                aforadores = aforadores_concatenados.split('; ')
 
-            for aforador in aforadores:
-                nombre_aforador, valor = aforador.split(': ')
-                aforador_dict[nombre_aforador] = valor
+                aforador_dict = {}
 
-            for j, aforador_name in enumerate(aforadores_columns, start=2):
-                valor = aforador_dict.get(aforador_name, '-')
-                self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
+                for aforador in aforadores:
+                    if ': ' in aforador:
+                        nombre_aforador, valor = aforador.split(': ')
+                    else:
+                        nombre_aforador = aforador
+                        valor = '-'
+                    aforador_dict[nombre_aforador] = valor
+
+                for j, aforador_name in enumerate(aforadores_columns, start=2):
+                    valor = aforador_dict.get(aforador_name, '-')
+                    self.tableWidget.setItem(i, j, QTableWidgetItem(valor))
 
         self.tableWidget.resizeColumnsToContents()

@@ -54,7 +54,7 @@ class InstrumentsView(QMainWindow):
 
         for i, row in data.iterrows():
             for j, item in enumerate(row):
-                if j == 4:
+                if j == 5:
                     item = "SI" if item == 1 else "NO"
                 if pd.isnull(item):
                     item = '-'
