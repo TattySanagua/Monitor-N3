@@ -9,7 +9,7 @@ class InstrumentsView(QMainWindow):
     def __init__(self):
         super(InstrumentsView,self).__init__()
         self.setWindowTitle("Instrumentos")
-        self.setGeometry(200, 100, 850, 700)
+        self.setGeometry(200, 100, 950, 700)
         self.create_layout()
 
     def create_layout(self):
@@ -41,20 +41,20 @@ class InstrumentsView(QMainWindow):
         if data.empty:
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
-            column_names = ["Nombre", "Tipo", "Medición", "Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
+            column_names = ["Nombre", "Tipo", "Medición", "Parámetros","Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
             self.tableWidget.setHorizontalHeaderLabels(column_names)
             return
 
         self.tableWidget.setRowCount(len(data))
         self.tableWidget.setColumnCount(len(data.columns) + 1)
 
-        column_names = ["Nombre", "Tipo", "Medición", "Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
+        column_names = ["Nombre", "Tipo", "Medición", "Parámetros","Fecha de instalación", "Fecha de baja", "Activo", "Dar de baja"]
 
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
         for i, row in data.iterrows():
             for j, item in enumerate(row):
-                if j == 5:
+                if j == 6:
                     item = "SI" if item == 1 else "NO"
                 if pd.isnull(item):
                     item = '-'
