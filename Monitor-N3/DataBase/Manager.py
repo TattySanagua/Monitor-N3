@@ -23,3 +23,6 @@ class DatabaseManager:
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
+    def fetch_one(self, query):  # SELECT (una fila o valor)
+        self.cursor.execute(query)
+        return self.cursor.fetchone()

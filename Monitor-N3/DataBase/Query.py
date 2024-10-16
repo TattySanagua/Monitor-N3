@@ -3,6 +3,7 @@ import pandas as pd
 
 class Query:
 
+    #GETTERS
     @staticmethod
     def get_embalse():
         database_manager = DatabaseManager()
@@ -37,11 +38,15 @@ class Query:
     @staticmethod
     def get_instrumentos():
         database_manager = DatabaseManager()
-        query = """SELECT nombre, nombre_tipo, tipo_medicion, fecha_alta, fecha_baja, activo 
-                    FROM instrumento INNER JOIN tipo USING(id_tipo);"""
+        query = """SELECT i.nombre, t.nombre_tipo, t.tipo_medicion,
+                    GROUP_CONCAT(CONCAT(p.nombre_parametro, ': ', p.valor) SEPARATOR ', ') AS parametros, 
+                    i.fecha_alta, i.fecha_baja, i.activo 
+                    FROM instrumento i INNER JOIN tipo t USING(id_tipo) 
+                    INNER JOIN parametro p USING(id_instrumento)
+                    GROUP BY i.id_instrumento, i.nombre, t.nombre_tipo, t.tipo_medicion, i.fecha_alta, i.fecha_baja, i.activo;"""
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['Nombre', 'Tipo', 'Medición', 'Fecha de instalación', 'Fecha de baja', 'Activo'])
+            df = pd.DataFrame(results, columns=['Nombre', 'Tipo', 'Medición', 'Parámetros', 'Fecha de instalación', 'Fecha de baja', 'Activo'])
             return df
         return pd.DataFrame()
 
@@ -76,6 +81,16 @@ class Query:
         return None
 
     @staticmethod
+    def get_parametro(nombre_instrumento, nombre_parametro):
+        database_manager = DatabaseManager()
+        query = (f"SELECT valor FROM parametro INNER JOIN instrumento USING(id_instrumento) "
+                 f"     WHERE parametro.nombre_parametro = '{nombre_parametro}' AND instrumento.nombre = '{nombre_instrumento}';")
+        results = database_manager.fetch_data(query)
+        if results:
+            return results[0][0]
+        return None
+
+    @staticmethod
     def get_embalse_piezometros():
         database_manager = DatabaseManager()
         query = ("""SELECT e.fecha, e.nivel_embalse, GROUP_CONCAT(CONCAT(i.nombre, ': ', IFNULL(m.valor, '-')) 
@@ -91,21 +106,40 @@ class Query:
             return df
         return pd.DataFrame()
 
+    # @staticmethod
+    # def get_piezometros_data():
+    #     database_manager = DatabaseManager()
+    #     query = ("""SELECT e.fecha, e.nivel_embalse, i.nombre, m.valor AS nivel_piezometrico
+    #                 FROM embalse e
+    #                 LEFT JOIN medicion m ON e.fecha = DATE(m.fecha)
+    #                 LEFT JOIN instrumento i ON m.id_instrumento = i.id_instrumento
+    #                 WHERE i.id_tipo = (SELECT id_tipo FROM tipo WHERE nombre_tipo = 'PIEZÓMETRO') AND i.activo = 1
+    #                 ORDER BY e.fecha DESC;""")
+    #     results = database_manager.fetch_data(query)
+    #     if results:
+    #         df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nombre', 'nivel_piezometrico'])
+    #         return df
+    #     return pd.DataFrame()
     @staticmethod
-    def get_piezometros_data():
+    def get_piezometros():
         database_manager = DatabaseManager()
-        query = ("""SELECT e.fecha, e.nivel_embalse, i.nombre, m.valor AS nivel_piezometrico
-                    FROM embalse e 
-                    LEFT JOIN medicion m ON e.fecha = DATE(m.fecha)
-                    LEFT JOIN instrumento i ON m.id_instrumento = i.id_instrumento
-                    WHERE i.id_tipo = (SELECT id_tipo FROM tipo WHERE nombre_tipo = 'PIEZÓMETRO') AND i.activo = 1 
-                    ORDER BY e.fecha DESC;""")
+        query = """SELECT id_instrumento, nombre FROM instrumento WHERE activo = 1;"""
         results = database_manager.fetch_data(query)
         if results:
-            df = pd.DataFrame(results, columns=['fecha', 'nivel_embalse', 'nombre', 'nivel_piezometrico'])
+            df = pd.DataFrame(results, columns=['id_instrumento', 'nombre'])
             return df
         return pd.DataFrame()
+    @staticmethod
+    def get_parametro(id_instrumento, nombre_parametro):
+        database_manager = DatabaseManager()
+        query = f"""SELECT valor FROM parametro WHERE id_instrumento = {id_instrumento}
+                AND nombre_parametro = '{nombre_parametro}' LIMIT 1;"""
+        result = database_manager.fetch_one(query)
+        database_manager.close_connection()
 
+        if result:
+            return result[0]
+        return None
     @staticmethod
     def get_embalse_pc1_5_6():
         database_manager = DatabaseManager()
@@ -244,7 +278,17 @@ class Query:
             return df
         return pd.DataFrame()
 
-    ####
+    @staticmethod
+    def get_ultimo_id_instrumento():
+        database_manager = DatabaseManager()
+        query = "SELECT MAX(id_instrumento) FROM instrumento;"
+        result = database_manager.fetch_data(query)
+        if result:
+            last_id = result[0][0]
+            return last_id
+        return None
+
+    #INSERTS
     @staticmethod
     def insert_data_embalse(fecha, hora, nivel_ambalse):
         database_manager = DatabaseManager()
@@ -260,66 +304,9 @@ class Query:
         database_manager.execute_query(query)
 
     @staticmethod
-    def insert_data_l3_pc1(fecha, nivel_piezometrico):
+    def insert_data_medicion(id_instrumento, fecha, nivel_piezometrico):
         database_manager = DatabaseManager()
-        query = (f"""INSERT INTO medicion_piezometro (id_instrumento, fecha, valor)
-        VALUES ((SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC1'), 
-                '{fecha}', 
-                {nivel_piezometrico});""")
-        database_manager.execute_query(query)
-
-    @staticmethod
-    def insert_data_l3_pc2(fecha, nivel_piezometrico):
-        database_manager = DatabaseManager()
-        query = (f"""INSERT INTO medicion_piezometro (id_instrumento, fecha, valor)
-        VALUES ((SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC2'), 
-                '{fecha}', 
-                {nivel_piezometrico});""")
-        database_manager.execute_query(query)
-
-    @staticmethod
-    def insert_data_l3_pc3(fecha, nivel_piezometrico):
-        database_manager = DatabaseManager()
-        query = (f"""INSERT INTO medicion_piezometro (id_instrumento, fecha, valor)
-        VALUES ((SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC3'), 
-                '{fecha}', 
-                {nivel_piezometrico});""")
-        database_manager.execute_query(query)
-
-    @staticmethod
-    def insert_data_l3_pc4(fecha, nivel_piezometrico):
-        database_manager = DatabaseManager()
-        query = (f"""INSERT INTO medicion_piezometro (id_instrumento, fecha, valor)
-        VALUES ((SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC4'), 
-                '{fecha}', 
-                {nivel_piezometrico});""")
-        database_manager.execute_query(query)
-
-    @staticmethod
-    def insert_data_l3_pc5(fecha, nivel_piezometrico):
-        database_manager = DatabaseManager()
-        query = (f"""INSERT INTO medicion_piezometro (id_instrumento, fecha, valor)
-        VALUES ((SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC5'), 
-                '{fecha}', 
-                {nivel_piezometrico});""")
-        database_manager.execute_query(query)
-
-    @staticmethod
-    def insert_data_l3_pc6(fecha, nivel_piezometrico):
-        database_manager = DatabaseManager()
-        query = (f"""INSERT INTO medicion_piezometro (id_instrumento, fecha, valor)
-        VALUES ((SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC6'), 
-                '{fecha}', 
-                {nivel_piezometrico});""")
-        database_manager.execute_query(query)
-
-    @staticmethod
-    def insert_data_l3_pc7(fecha, nivel_piezometrico):
-        database_manager = DatabaseManager()
-        query = (f"""INSERT INTO medicion_piezometro (id_instrumento, fecha, valor)
-        VALUES ((SELECT id_instrumento FROM instrumento WHERE nombre = 'L3-PC7'), 
-                '{fecha}', 
-                {nivel_piezometrico});""")
+        query = f"""INSERT INTO medicion (id_instrumento, fecha, valor) VALUES ({id_instrumento}, '{fecha}', {nivel_piezometrico});"""
         database_manager.execute_query(query)
 
     @staticmethod
@@ -365,6 +352,15 @@ class Query:
                     VALUES ('{nombre}', '{id_tipo}', '{fecha_alta}', 1);"""
         database_manager.execute_query(query)
 
+    @staticmethod
+    def insert_data_parametro(id_instrumento, nombre_parametro, valor):
+        database_manager = DatabaseManager()
+        query = f"""INSERT INTO parametro (id_instrumento, nombre_parametro, valor) 
+                        VALUES ('{id_instrumento}', '{nombre_parametro}', '{valor}');"""
+        database_manager.execute_query(query)
+
+
+    #DELETS
     @staticmethod
     def delete_instrument(nombre_instrumento):
         database_manager = DatabaseManager()

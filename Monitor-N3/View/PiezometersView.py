@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QColor, QFontDatabase
-from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, \
     QMessageBox, QDateEdit, QComboBox, QGridLayout
 from mysql.connector import IntegrityError
 from DataBase.Query import Query
@@ -15,16 +15,6 @@ class PiezometersView(QWidget):
         self.data_updater = DataUpdater()
         self.data_updater.data_updated_signal.connect(self.actualizar_tabla)
 
-        #Diccionario de mapeo para insert
-        self.insert_functions = {
-            "L3-PC1": Query.insert_data_l3_pc1,
-            "L3-PC2": Query.insert_data_l3_pc2,
-            "L3-PC3": Query.insert_data_l3_pc3,
-            "L3-PC4": Query.insert_data_l3_pc4,
-            "L3-PC5": Query.insert_data_l3_pc6,
-            "L3-PC6": Query.insert_data_l3_pc7
-        }
-
     def setup_ui(self):
 
         lbl_titulo_ppal = QLabel("PIEZÓMETROS", self)
@@ -36,8 +26,10 @@ class PiezometersView(QWidget):
 
         self.cmbx_piezometro = QComboBox(self)
         self.cmbx_piezometro.setFixedWidth(150)
-        self.cmbx_piezometro.addItems(["L3-PC1", "L3-PC2", "L3-PC3", "L3-PC4", "L3-PC5", "L3-PC6", "L3-PC7"])
-        self.cmbx_piezometro.currentIndexChanged.connect(self.actualizar_piezometro)
+        data_tipo = Query.get_piezometros()
+        if not data_tipo.empty:
+            piezometros_list = data_tipo['nombre'].tolist()
+            self.cmbx_piezometro.addItems(piezometros_list)
 
         self.lbl_Np = QLabel("Nivel piezométrico = ")
         self.lbl_resultado = QLabel("")
@@ -99,13 +91,24 @@ class PiezometersView(QWidget):
 
 
     def calcular_nps(self):
-        cb_values = [605.22, 604.24, 603.88, 600.60, 616.32, 616.17, 616.02]
+        piezometro_nombre = self.cmbx_piezometro.currentText()
+        data = Query.get_piezometros()
+        piezometro_data = data[data['nombre'] == piezometro_nombre]
 
-        piezometro_index = self.cmbx_piezometro.currentIndex()
-        cb = cb_values[piezometro_index]
+        if piezometro_data.empty:
+            QMessageBox.warning(self, "Error", "No se pudo encontrar el piezómetro seleccionado.")
+            return
+
+        id_instrumento = piezometro_data['id_instrumento'].values[0]
+        cb = float(Query.get_parametro(id_instrumento, 'cb'))
+        angulo = float(Query.get_parametro(id_instrumento, 'angulo'))
+
+        if cb is None or angulo is None:
+            QMessageBox.warning(self, "Error",
+                                f"No se encontraron los parámetros cb o ángulo para el piezómetro {piezometro_nombre}.")
+            return
 
         lectura = self.lned_lectura.text()
-        decimales = 2
 
         if not lectura:
             QMessageBox.warning(self, "Error", "Por favor, complete el campo numérico.")
@@ -113,7 +116,8 @@ class PiezometersView(QWidget):
         else:
             try:
                 lectura = float(lectura)
-                resultado = Calculadora.Calculadora().calcular_np(cb, lectura)
+                decimales = 2
+                resultado = Calculadora.Calculadora().calcular_np(cb, lectura, angulo)
                 self.lbl_resultado.setText(f"{resultado:.{decimales}f}")
                 self.lned_lectura.clear()
             except ValueError:
@@ -137,16 +141,20 @@ class PiezometersView(QWidget):
                 return
 
         try:
+            data = Query.get_piezometros()
+            id_instrumento = data.loc[data['nombre'] == piezometro, 'id_instrumento'].values[0]
+
             if resultado:
                 resultado = float(resultado)
             else:
                 resultado = "NULL"
 
-            insert_function = self.insert_functions[piezometro]
-            insert_function(fecha, resultado)
+            Query.insert_data_medicion(id_instrumento, fecha, resultado)
             self.lbl_resultado.clear()
+
             QMessageBox.information(self, "Éxito", "Los datos se guardaron correctamente.")
             self.data_updater.update_data()
+
         except ValueError:
                     QMessageBox.critical(self, "Error", "Error al guardar los datos.")
         except IntegrityError as e:
